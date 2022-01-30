@@ -1,0 +1,16 @@
+{
+  "name": "web_app",
+  "version": "1.0.0",
+  "description": "web application",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Elizabeth Waters",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "express": "^4.17.2",
+    "mongoose": "^6.1.8"
+  }
+}
