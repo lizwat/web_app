@@ -8,13 +8,24 @@ app.get('/home', function(req, res){
     res.send('Home Screen');
 });
 
+
 //Connecting to DB
-mongoose.connect('mongodb://localhost:27017/Backend',
+mongoose.connect('mongodb+srv://steve:chocolate3@cluster0.g7hvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
     { useNewUrlParser: true },
     function (){
         console.log('connected to database');
     }
 );
+
+/**
+const { MongoClient } = require('mongodb');
+const uri = "mongodb+srv://emw119:Mikey567!@cluster0.g7hvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+client.connect(err => {
+  const collection = client.db("test").collection("devices");
+  // perform actions on the collection object
+  client.close();
+}); */
 
 //CRUD Operations
 
