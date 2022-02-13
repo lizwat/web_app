@@ -1,58 +1,96 @@
-const express = require('express');
-const app = express();
-const mongoose = require('mongoose');
-const User = require('./User.js')
-app.use(express.json());
+var express = require("express"),
+    mongoose = require("mongoose"),
+    passport = require("passport"),
+    bodyParser = require("body-parser"),
+    LocalStrategy = require("passport-local"),
+    passportLocalMongoose =
+        require("passport-local-mongoose"),
+    User = require("./model/user");
+//
+/*mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true); */
+mongoose.connect("mongodb+srv://steve:chocolate3@cluster0.g7hvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
 
-app.get('/home', function(req, res){
-    res.send('Home Screen');
+var app = express();
+app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(require("express-session")({
+    secret: "Rusty is a dog",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+//=====================
+// ROUTES
+//=====================
+
+// Showing home page
+app.get("/", function (req, res) {
+    res.render("home");
 });
 
-
-//Connecting to DB
-mongoose.connect('mongodb+srv://steve:chocolate3@cluster0.g7hvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
-    { useNewUrlParser: true },
-    function (){
-        console.log('connected to database');
-    }
-);
-
-/**
-const { MongoClient } = require('mongodb');
-const uri = "mongodb+srv://emw119:Mikey567!@cluster0.g7hvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-client.connect(err => {
-  const collection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  client.close();
-}); */
-
-//CRUD Operations
-
-//get all users
-app.get('/read', async function(req, res){
-    const users = await User.find().exec();
-    res.status(200).json(users);
-
+// Showing secret page
+app.get("/secret", isLoggedIn, function (req, res) {
+    res.render("secret");
 });
 
+// Showing register form
+app.get("/register", function (req, res) {
+    res.render("register");
+});
 
-//Post user data
-app.post('/post', async function(req, res){
-    const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        gender: req.body.gender
+// Handling user signup
+app.post("/register", function (req, res) {
+    var username = req.body.username
+    var password = req.body.password
+    User.register(new User({ username: username }),
+            password, function (err, user) {
+        if (err) {
+            console.log(err);
+            return res.render("register");
+        }
+
+        passport.authenticate("local")(
+            req, res, function () {
+            res.render("secret");
+        });
     });
-
-    try {
-        await user.save();
-        res.status(200).json({"success": true, "message":"User details saved"});
-
-    } catch (err) {
-        res.status(400).json({"success": false, "message":"Error in saving user details"});
-    }
-
 });
 
-app.listen(3000, () => console.log('Listening on Port 3000'));
+//Showing login form
+app.get("/login", function (req, res) {
+    res.render("login");
+});
+
+//Handling user login
+app.post("/login", passport.authenticate("local", {
+    successRedirect: "/secret",
+    failureRedirect: "/login"
+}), function (req, res) {
+});
+
+//Handling user logout
+app.get("/logout", function (req, res) {
+    req.logout();
+    res.redirect("/");
+});
+
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.redirect("/login");
+}
+
+var port = process.env.PORT || 3000;
+app.listen(port, function () {
+    console.log("Server Has Started!");
+});
