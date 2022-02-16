@@ -1,0 +1,4 @@
+Run on localhost:3000
+Use node app.js to run the website in the terminal 
+See the mongodb related data in compass
+- myFirstDatabase -> users
