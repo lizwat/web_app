@@ -55,6 +55,26 @@ app.post("/register",(req,res)=>{
     })    
     })
 })
+
+app.get("/search",(req,res)=>{
+    res.render("search");
+});
+app.post("/search", async (req,res)=>{
+
+    const input = req.body.search;
+    const results = await User.find({username: input})
+    console.log(results)
+
+    res.send(results)
+
+
+ 
+
+})
+
+
+
+
 app.get("/logout",(req,res)=>{
     req.logout();
     res.redirect("/");
