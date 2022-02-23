@@ -6,6 +6,7 @@ const express = require('express'),
     LocalStrategy = require("passport-local"),
     passportLocalMongoose = require("passport-local-mongoose"),
     User = require("./models/user");
+    PostModel = require("./models/post");
 //Connecting database
 mongoose.connect("mongodb+srv://steve:chocolate3@cluster0.g7hvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
 app.use(require("express-session")({
@@ -13,9 +14,20 @@ app.use(require("express-session")({
     resave: false,
     saveUninitialized: false
 }));
+
+const db = mongoose.connection
+db.on("error", (err) => {
+    console.error(`err: ${err}`)
+  })// if connected
+  db.on('connected', (err, res) => {
+    console.log('Connected to database')
+})
+const postCollection = db.collection('posts')
+
 passport.serializeUser(User.serializeUser()); //session encoding
 passport.deserializeUser(User.deserializeUser()); //session decoding
 passport.use(new LocalStrategy(User.authenticate()));
+
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({
     extended: true
@@ -34,6 +46,10 @@ app.get("/userprofile", isLoggedIn, (req, res) => {
 //Auth Routes
 app.get("/login", (req, res) => {
     res.render("login");
+});
+
+app.get("/createpost", (req, res) => {
+    res.render("createpost");
 });
 
 app.get("/dashboard", (req, res) => {
@@ -63,6 +79,22 @@ app.post("/register", (req, res) => {
             res.redirect("/login");
         })
     })
+})
+
+app.post('/createpost', (req, res) => {
+    postCollection.insertOne(req.body)
+    .then(result => {
+      res.redirect('dashboard')
+    })
+    .catch(error => console.error(error))
+})
+
+app.get('/posthistory', (req, res) => {
+    db.collection('posts').find().toArray()
+    .then(results => {
+        res.render('posthistory', { posts: results})
+      })
+      .catch(error => console.error(error))
 })
 
 //Kevin's section
