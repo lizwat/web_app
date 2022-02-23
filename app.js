@@ -65,10 +65,76 @@ app.post("/register", (req, res) => {
     })
 })
 
+//tutor rating
+    app.get("/tutors",(req,res)=>{
+      res.render("tutors");
+    });
+
+
+
+    app.post("/tutors", async (req, res)=> {
+      const input = req.body;
+      var rateVal = parseFloat(input.rating);
+      //console.log(rateVal);
+      //res.send(rateVal);
+
+      var user = await User.findOne({username: "liz"});
+
+      console.log(user.username);
+
+      if(! user.rateCount){
+        var newVals = { $set: {rateCount: 1, rateAverage: rateVal}};
+        console.log(newVals[1]);
+        User.updateOne(user,{rateCount: 1, rateAverage: rateVal}, function(err, res){
+          if(err){
+            throw err;
+            console.log(err);
+          }
+          else {
+            console.log("1 document updated");
+            console.log(user.rateCount);
+          }
+        });
+      }
+      else {
+        var rateCount  = parseFloat(user.rateCount);
+        var rateAvg = parseFloat(user.rateAverage);
+        console.log(rateCount);
+        console.log(rateAvg);
+
+        var updatedRateAvg = ((rateCount*rateAvg) + rateVal)/(rateCount + 1);
+        var updateRateCount = rateCount +  1;
+        var a = "" + updatedRateAvg;
+        var b = "" + updateRateCount;
+        console.log(updatedRateAvg);
+        console.log(updateRateCount);
+
+
+        var newVals = { $set: {rateCount: updateRateCount, rateAverage: updatedRateAvg}};
+
+
+        User.updateOne({username: "liz"}, {rateCount: updateRateCount, rateAverage:updatedRateAvg}, function(err, res){
+          if(err){
+            throw err;
+            console.log(err);
+          }
+          else {
+            console.log("1 document updated");
+          }
+        });
+
+      }
+
+      res.send(user);
+    });
+
+
+
 //Kevin's section
 app.get("/search",(req,res)=>{
     res.render("search");
 });
+
 app.post("/search", async (req,res)=>{
 
     const input = req.body.search;
@@ -89,6 +155,7 @@ function isLoggedIn(req, res, next) {
     }
     res.redirect("/login");
 }
+
 //Listen On Server
 app.listen(process.env.PORT || 3000, function (err) {
     if (err) {
@@ -96,5 +163,8 @@ app.listen(process.env.PORT || 3000, function (err) {
     } else {
         console.log("Server Started At Port 3000");
     }
+
+
+
 
 });
