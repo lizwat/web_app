@@ -104,8 +104,7 @@ app.post("/register", (req, res) => {
 
         var updatedRateAvg = ((rateCount*rateAvg) + rateVal)/(rateCount + 1);
         var updateRateCount = rateCount +  1;
-        var a = "" + updatedRateAvg;
-        var b = "" + updateRateCount;
+        
         console.log(updatedRateAvg);
         console.log(updateRateCount);
 
@@ -129,6 +128,7 @@ app.post("/register", (req, res) => {
     });
 
 
+//end tutor rating
 
 //Kevin's section
 app.get("/search",(req,res)=>{
