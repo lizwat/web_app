@@ -104,10 +104,11 @@ app.get("/search",(req,res)=>{
 app.post("/search", async (req,res)=>{
 
     const input = req.body.search;
-    const results = await User.find({username: input}) //search only queries by username.  A simple function can be used to make query more robust
-    console.log(results)
+    const results = await User.find({username: {"$regex": input}}) //search only queries by username (inclusive).  
+    const output = queryParse(results)
+    console.log(output)
 
-    res.send(results) //res.send just displays the list.  List will need to be parsed/sent to a new view to actually be helpful
+    res.send(output) //res.send just displays the list.  List will need to be parsed/sent to a new view to actually be helpful
 })
 //end Kevin's section
 app.get("/logout",(req,res)=>{
@@ -130,3 +131,12 @@ app.listen(process.env.PORT || 3000, function (err) {
     }
 
 });
+
+function queryParse(querylist){ //parses db results list for specific datafields - will be expanded as user.js is finalized
+    var result = new Array();
+    for(let i =0; i<querylist.length;i++){
+        result.push(querylist[i].username);
+    }
+    return result;
+
+}
