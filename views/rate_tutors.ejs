@@ -1,14 +1,13 @@
 
 
 
-<h1>
-  Rate tutors
-  </h1>
+<% users.forEach(function (user) { %>
+    <li>
+        <h1>Rate: <%= user.username %> </h1>
+    </li>
+<% }) %>
 
-
-  <form action="/tutors" method="POST">
-    <label for="name">Enter the username of the tutor you would like to rate: </label>
-    <input type="text" id="name" name="name" />
+  <form action="/rate_tutors" method="POST">
     <label for="rate">Rate your tutor</label>
     <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 </label>
     <input type="radio" id="star4half" name="rating" value="4.5" /><label for="star4half">4 1/2 </label>

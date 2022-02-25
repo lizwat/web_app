@@ -5,8 +5,8 @@ const UserSchema = new mongoose.Schema({
     password:String,
     phone:Number,
     telephone:Number,
-    rateCount: Number,
-    rateAverage: Number
+    rateCount: 0,
+    rateAverage: 0
 }) ;
 UserSchema.plugin(passportLocalMongoose);
 module.exports = mongoose.model("User",UserSchema);

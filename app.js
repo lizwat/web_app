@@ -78,7 +78,7 @@ app.post("/register", (req, res) => {
       //console.log(rateVal);
       //res.send(rateVal);
 
-      var user = await User.findOne({username: "liz"});
+      var user = await User.findOne({username: input.name});
 
       console.log(user.username);
 
@@ -104,7 +104,7 @@ app.post("/register", (req, res) => {
 
         var updatedRateAvg = ((rateCount*rateAvg) + rateVal)/(rateCount + 1);
         var updateRateCount = rateCount +  1;
-        
+
         console.log(updatedRateAvg);
         console.log(updateRateCount);
 
@@ -112,7 +112,7 @@ app.post("/register", (req, res) => {
         var newVals = { $set: {rateCount: updateRateCount, rateAverage: updatedRateAvg}};
 
 
-        User.updateOne({username: "liz"}, {rateCount: updateRateCount, rateAverage:updatedRateAvg}, function(err, res){
+        User.updateOne({username: input.name}, {rateCount: updateRateCount, rateAverage:updatedRateAvg}, function(err, res){
           if(err){
             throw err;
             console.log(err);
