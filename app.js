@@ -69,7 +69,8 @@ app.post("/register", (req, res) => {
     User.register(new User({
         username: req.body.username,
         phone: req.body.phone,
-        telephone: req.body.telephone
+        telephone: req.body.telephone,
+        tutor: true,
     }), req.body.password, function (err, user) {
         if (err) {
             console.log(err);
@@ -161,7 +162,8 @@ app.get('/posthistory', (req, res) => {
 
 //end tutor rating
 
-//Kevin's section
+//Search
+//TODO: filter queries to only retrieve tutors for a specific class during search
 app.get("/search",(req,res)=>{
     res.render("search");
 });
@@ -169,13 +171,14 @@ app.get("/search",(req,res)=>{
 app.post("/search", async (req,res)=>{
 
     const input = req.body.search;
-    const results = await User.find({username: {"$regex": input}}) //search only queries by username (inclusive).  
+    const results = await User.find({username: {"$regex": input}, tutor:true}) //search queries by username (inclusive) and returns only tutors  
     const output = queryParse(results)
-    console.log(output)
+    //console.log(output)
 
     res.send(output) //res.send just displays the list.  List will need to be parsed/sent to a new view to actually be helpful
 })
-//end Kevin's section
+//end search
+
 app.get("/logout",(req,res)=>{
     req.logout();
     res.redirect("/");
@@ -198,11 +201,34 @@ app.listen(process.env.PORT || 3000, function (err) {
 
 });
 
+//parse query output
+//TODO: unrated users are left at top of list.  Could be bug, could be feature
 function queryParse(querylist){ //parses db results list for specific datafields - will be expanded as user.js is finalized
+    querylist = bubbleSort(querylist, querylist.length);
     var result = new Array();
-    for(let i =0; i<querylist.length;i++){
+    for(let i =querylist.length-1; i>=0;i--){ //list iterated in reverse as bubblesort orders low to high
         result.push(querylist[i].username);
+        //console.log(querylist[i].username + " - Rate: " + querylist[i].rateAverage)
     }
     return result;
+}
 
+//sort search results
+function bubbleSort(arr, n){ //bubblesort algorithm pulled from https://www.geeksforgeeks.org/bubble-sort/
+    var i, j, temp;
+    var swapped;
+    for (i = 0; i < n - 1; i++) {
+        swapped = false;
+        for (j = 0; j < n - i - 1; j++) {
+            if (arr[j].rateAverage > arr[j + 1].rateAverage) { //sorts in order of rate avg.  May apply weight for ratecount in the future.
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+                swapped = true;
+            }
+        }
+        if (swapped == false)
+            break;
+    }
+    return arr
 }
