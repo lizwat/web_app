@@ -107,20 +107,17 @@ app.get('/posthistory', (req, res) => {
     app.post("/tutors", async (req, res)=> {
       const input = req.body;
       var rateVal = parseFloat(input.rating);
-      //console.log(rateVal);
-      //res.send(rateVal);
+    
 
       var user = await User.findOne({username: input.name});
 
       console.log(user.username);
 
       if(! user.rateCount){
-        var newVals = { $set: {rateCount: 1, rateAverage: rateVal}};
-        console.log(newVals[1]);
+        
         User.updateOne(user,{rateCount: 1, rateAverage: rateVal}, function(err, res){
           if(err){
             throw err;
-            console.log(err);
           }
           else {
             console.log("1 document updated");
@@ -141,13 +138,9 @@ app.get('/posthistory', (req, res) => {
         console.log(updateRateCount);
 
 
-        var newVals = { $set: {rateCount: updateRateCount, rateAverage: updatedRateAvg}};
-
-
         User.updateOne({username: input.name}, {rateCount: updateRateCount, rateAverage:updatedRateAvg}, function(err, res){
           if(err){
             throw err;
-            console.log(err);
           }
           else {
             console.log("1 document updated");
