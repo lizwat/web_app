@@ -7,6 +7,8 @@ const express = require('express'),
     passportLocalMongoose = require("passport-local-mongoose"),
     User = require("./models/user");
     PostModel = require("./models/post");
+
+
 //Connecting database
 mongoose.connect("mongodb+srv://steve:chocolate3@cluster0.g7hvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
 app.use(require("express-session")({
@@ -97,6 +99,18 @@ app.get('/posthistory', (req, res) => {
       })
       .catch(error => console.error(error))
 })
+
+app.get("/tutorslist", async (req, res)=>{
+   var users =  await User.find({});
+   res.render("tutorslist", {"users": users});
+})
+
+app.post("/tutorslist", async (req, res)=> {
+    let tutor =  "<%= user.username %> ";
+    var user = await User.find({username: tutor})
+    res.render("rate_tutors", {"users": user});
+})
+
 //tutor rating
     app.get("/tutors",(req,res)=>{
       res.render("tutors");
