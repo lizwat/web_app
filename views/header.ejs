@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -20,6 +21,20 @@
                 <li><a href="/createpost">Create Post</a></li>
                 <li><a href="/posthistory">Post History</a></li>
                 <li><a href="/tutors">Tutors</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-center">
+                <div>
+                    <form action="/search" method="POST">
+                        <input type="text" placeholder="Search.." name="search">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+
+                <div class="results-container">
+                    <ul class="results-list" id="list">
+
+                    </ul>
+                </div>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#"><span class="glyphicon glyphicon-user"></span> Switch to Tutor</a></li>
@@ -41,5 +56,21 @@
 <style>
     body {
         background-color: #edf2f4;
+    }
+
+
+    .topnav .search-container button {
+        float: right;
+        padding-top: 20px;
+        margin-top: 40px;
+        margin-right: 2000px;
+        background: #edf2f4;
+        font-size: 17px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .topnav .search-container button:hover {
+        background: #edf2f4;
     }
 </style>
