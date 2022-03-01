@@ -66,6 +66,7 @@ app.post("/login", passport.authenticate("local", {
 app.get("/register", (req, res) => {
     res.render("register");
 });
+
 app.post("/register", (req, res) => {
 
     User.register(new User({
@@ -100,36 +101,39 @@ app.get('/posthistory', (req, res) => {
       .catch(error => console.error(error))
 })
 
-app.get("/tutorslist", async (req, res)=>{
+app.get("/tutors", async (req, res)=>{
    var users =  await User.find({});
-   res.render("tutorslist", {"users": users});
+   res.render("tutors", {"users": users});
 })
 
-app.post("/tutorslist", async (req, res)=> {
-    let tutor =  "<%= user.username %> ";
+
+app.post("/tutors", async (req, res)=> {
+    let tutor =  req.body.username;
     var user = await User.find({username: tutor})
     res.render("rate_tutors", {"users": user});
-})
+}) 
+
 
 //tutor rating
-    app.get("/tutors",(req,res)=>{
-      res.render("tutors");
+
+    app.get("/rate_tutors",(req,res)=>{
+      res.render("rate_tutors");
     });
 
 
-
-    app.post("/tutors", async (req, res)=> {
-      const input = req.body;
-      var rateVal = parseFloat(input.rating);
+    app.post("/rate_tutors", async (req, res)=> {
+      const input = req.body.username;
+      const rates = req.body;
+      var rateVal = parseFloat(rates.rate);
     
 
-      var user = await User.findOne({username: input.name});
+      var user = await User.findOne({username: input});
 
       console.log(user.username);
 
-      if(! user.rateCount){
+      if(!user.rateCount || isNaN(user.rateAverage)){
         
-        User.updateOne(user,{rateCount: 1, rateAverage: rateVal}, function(err, res){
+        User.updateOne(user, {rateCount: 1, rateAverage: rateVal}, function(err, res){
           if(err){
             throw err;
           }
@@ -138,6 +142,7 @@ app.post("/tutorslist", async (req, res)=> {
             console.log(user.rateCount);
           }
         });
+    
       }
       else {
         var rateCount  = parseFloat(user.rateCount);
@@ -152,7 +157,7 @@ app.post("/tutorslist", async (req, res)=> {
         console.log(updateRateCount);
 
 
-        User.updateOne({username: input.name}, {rateCount: updateRateCount, rateAverage:updatedRateAvg}, function(err, res){
+        User.updateOne({username: input}, {rateCount: updateRateCount, rateAverage:updatedRateAvg}, function(err, res){
           if(err){
             throw err;
           }
@@ -160,6 +165,7 @@ app.post("/tutorslist", async (req, res)=> {
             console.log("1 document updated");
           }
         });
+       
 
       }
 

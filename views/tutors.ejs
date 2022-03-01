@@ -42,12 +42,14 @@
 
                         </ul>
                     </div>
+
                 </div>
             </div>
         </div>
-
+       <form method="POST" action="/tutors">
+        <% users.forEach(function (user, i) { %> 
+            <%if(i % 3 === 0) { %>
         <div class="row">
-
             <div class="col-lg-9">
                 <div class="candidates-listing-item">
                     <div class="list-grid-item mt-4 p-2">
@@ -57,8 +59,9 @@
                                     <img src="https://via.placeholder.com/150x150/4169E1/000000" alt="avatar"
                                         class="img-fluid d-block rounded">
                                 </div>
+                              
                                 <div class="candidates-list-desc job-single-meta  pt-2">
-                                    <h5 class="mb-2 f-19"><a href="#" class="text-dark">Name</a></h5>
+                                    <h5 class="mb-2 f-19"><a href="#" class="text-dark">Name: <%= user.username %></a></h5>
                                     <ul class="list-inline mb-0">
                                         <li class="list-inline-item mr-4">
                                             <p class="text-muted f-15 mb-0"><i class="mdi mdi-account mr-1"></i>Web
@@ -71,7 +74,7 @@
                                         </li>
 
                                         <li class="list-inline-item">
-                                            <p class="text-muted f-15 mb-0"><i class=""></i>Rating: </p>
+                                            <p class="text-muted f-15 mb-0"><i class=""></i>Rating: <%= user.rateAverage %></p>
                                         </li>
                                     </ul>
                                     <p class="text-muted mt-1 mb-0">Skills : HTML</p>
@@ -84,7 +87,7 @@
                                         <i class="mdi mdi-heart f-20"></i>
                                     </div>
                                     <div class="candidates-listing-btn mt-4">
-                                        <a href="#" class="btn btn-outline btn-sm">View Profile</a>
+                                        <button name= "username" value="<%= user.username %>" href="#" class="btn btn-outline btn-sm">View Profile</button>
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +102,9 @@
                             </div>
                         </div>
                     </div>
-
+                    <% }%>
+                
+                    <% if((i + 1) % 3 === 0) { %>
                     <div class="list-grid-item mt-4 p-2">
                         <div class="row">
                             <div class="col-md-9">
@@ -107,8 +112,10 @@
                                     <img src="https://via.placeholder.com/150x150/4169E1/000000" alt=""
                                         class="img-fluid d-block rounded">
                                 </div>
+                             
+                                
                                 <div class="candidates-list-desc job-single-meta  pt-2">
-                                    <h5 class="mb-2 f-19"><a href="#" class="text-dark">Name</a></h5>
+                                    <h5 class="mb-2 f-19"><a href="#" class="text-dark">Name: <%= user.username%></a></h5>
                                     <ul class="list-inline mb-0">
                                         <li class="list-inline-item mr-4">
                                             <p class="text-muted f-15 mb-0"><i class="mdi mdi-account mr-1"></i>Web
@@ -121,7 +128,7 @@
                                         </li>
 
                                         <li class="list-inline-item">
-                                            <p class="text-muted f-15 mb-0"><i class=""></i>Rating</p>
+                                            <p class="text-muted f-15 mb-0"><i class=""></i>Rating: <%= user.rateAverage%></p>
                                         </li>
                                     </ul>
                                     <p class="text-muted mt-1 mb-0">Skills : HTML, CSS.</p>
@@ -134,7 +141,7 @@
                                         <i class="mdi mdi-heart f-20"></i>
                                     </div>
                                     <div class="candidates-listing-btn mt-4">
-                                        <a href="#" class="btn btn-outline btn-sm">View Profile</a>
+                                        <button href="#" name= "username" value="<%= user.username %>" class="btn btn-outline btn-sm">View Profile</button>
                                     </div>
                                 </div>
                             </div>
@@ -149,7 +156,9 @@
                             </div>
                         </div>
                     </div>
+                    <% } %>
 
+                    <% if((i + 2) % 3 === 0) {%>
                     <div class="list-grid-item mt-4 p-2">
                         <div class="row">
                             <div class="col-md-9">
@@ -158,7 +167,7 @@
                                         class="img-fluid d-block rounded">
                                 </div>
                                 <div class="candidates-list-desc job-single-meta  pt-2">
-                                    <h5 class="mb-2 f-19"><a href="#" class="text-dark">Name</a></h5>
+                                    <h5 class="mb-2 f-19"><a href="#" class="text-dark">Name: <%= user.username%></a></h5>
                                     <ul class="list-inline mb-0">
                                         <li class="list-inline-item mr-4">
                                             <p class="text-muted f-15 mb-0"><i class="mdi mdi-account mr-1"></i>Web
@@ -171,7 +180,7 @@
                                         </li>
 
                                         <li class="list-inline-item">
-                                            <p class="text-muted f-15 mb-0"><i class=""></i>Rating:</p>
+                                            <p class="text-muted f-15 mb-0"><i class=""></i>Rating: <%= user.rateAverage%></p>
                                         </li>
                                     </ul>
                                     <p class="text-muted mt-1 mb-0">Skills : HTML, CSS.</p>
@@ -184,11 +193,12 @@
                                         <i class="mdi mdi-heart f-20"></i>
                                     </div>
                                     <div class="candidates-listing-btn mt-4">
-                                        <a href="#" class="btn btn-outline btn-sm">View Profile</a>
+                                        <button href="#" name= "username" value="<%= user.username %>" class="btn btn-outline btn-sm">View Profile</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                   
 
                         <div class="row">
                             <div class="col-lg-11 offset-lg-1">
@@ -198,11 +208,15 @@
                                 </div>
                             </div>
                         </div>
+                        <% } %>
                     </div>
+        
 
                 </div>
             </div>
         </div>
+        <% })%>
+    </form>
 
         <div class="row">
             <div class="col-lg-12">
@@ -347,7 +361,7 @@
 
 </html>
 
-<!-- previous tutors page-->
+<!-- previous tutors page
 <html>
 
 <head>
@@ -424,6 +438,6 @@
     .rate>label:hover~input:checked~label {
         color: #c59b08;
     }
-</style>
+</style> 
 
-</html>
+</html> -->
