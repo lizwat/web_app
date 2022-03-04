@@ -54,8 +54,20 @@ app.get("/createpost", (req, res) => {
     res.render("createpost");
 });
 
+const postSchema = {
+    class: String,
+    topic: String,
+    description: String
+}
+
+const Post = mongoose.model('post', postSchema); 
+
 app.get("/dashboard", (req, res) => {
-    res.render("dashboard");
+    Post.find({}, function (err, posts){
+        res.render('dashboard', {
+            postList: posts
+        })
+    })
 });
 
 app.post("/login", passport.authenticate("local", {

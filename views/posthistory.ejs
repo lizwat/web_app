@@ -1,14 +1,40 @@
 <%- include('header') -%>
 
-<h2> Posts </h2>
+<!DOCTYPE html>
+<html lang="en">
 
-<ul class="posts">
-  <!-- Loop through quotes -->
-  <% for(var i = 0; i < posts.length; i++) {%>
-    <li class="post">
-      <span><%= posts[i].class %></span>:
-      <span><%= posts[i].topic %></span>
-      <span><%= posts[i].description %></span>
-    </li>
-  <% } %>
-</ul>
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+
+
+<!-- TABLE HEADER -->
+<table > 
+  <thead>
+      <tr>
+          <th class="Class" scope="col">Class</th>
+          <th class="Topic" scope="col">Topic</th>
+          <th class="Description" scope="col">Description</th>       
+      </tr>
+  </thead>
+
+  <tbody>
+
+  <%postList.forEach(post => {%>
+      <tr>
+          <td><%= post.class %></td>
+          <td><%= post.topic %> </td>
+          <td><%= post.description %> </td>
+      </tr>
+  <%})%>
+  
+
+  </tbody>
+
+</table>
+
+</body>
+
+</html>
