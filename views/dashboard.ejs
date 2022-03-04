@@ -1,5 +1,64 @@
 <%- include('header') -%>
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+
+
+<style>
+    .table {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+  
+    th.subject {
+        width: 15%
+    }
+
+    th.user {
+        width: 15%
+    }
+
+    th.date {
+        width: 7%
+    }
+</style>
+
+<!-- TABLE HEADER -->
+<table id = "table" class = "table" > 
+    <thead>
+        <tr>
+            <th class="Class" scope="col">Class</th>
+            <th class="Topic" scope="col">Topic</th>
+            <th class="Description" scope="col">Description</th>       
+        </tr>
+    </thead>
+
+    <tbody>
+
+    <%postList.forEach(post => {%>
+        <tr>
+            <td><%= post.class %></td>
+            <td><%= post.topic %> </td>
+            <td><%= post.description %> </td>
+        </tr>
+    <%})%>
+    
+
+    </tbody>
+
+</table>
+
+</body>
+
+</html>
+
 
 
 <%- include('footer') -%>
