@@ -129,12 +129,13 @@ app.post("/tutors", async (req, res)=> {
 //tutor rating
 
     app.get("/rate_tutors",(req,res)=>{
-      res.render("rate_tutors");
+      res.render("rate_tutors", {"users": user});
     });
 
 
     app.post("/rate_tutors", async (req, res)=> {
       const input = req.body.username;
+      console.log(req.body.username);
       const rates = req.body;
       var rateVal = parseFloat(rates.rate);
     
@@ -198,9 +199,11 @@ app.post("/search", async (req,res)=>{
     const input = req.body.search;
     const results = await User.find({username: {"$regex": input}, tutor:true}) //search queries by username (inclusive) and returns only tutors  
     const output = queryParse(results)
-    //console.log(output)
+    console.log(output)
 
-    res.send(output) //res.send just displays the list.  List will need to be parsed/sent to a new view to actually be helpful
+    res.render("tutors", {"users": results});
+
+   // res.send(output) //res.send just displays the list.  List will need to be parsed/sent to a new view to actually be helpful
 })
 //end search
 
