@@ -79,6 +79,10 @@ app.get("/register", (req, res) => {
     res.render("register");
 });
 
+app.get("/changepassword", (req, res) => {
+    res.render("changepassword");
+});
+
 app.post("/register", (req, res) => {
 
     User.register(new User({
