@@ -54,7 +54,7 @@ app.get("/createpost", (req, res) => {
     res.render("createpost");
 });
 
-app.get("/matches", (req, res)=>{
+app.get("/matches", async (req, res)=>{
     var users =  await User.find({});
     res.render("matches", {"users": users});
 })

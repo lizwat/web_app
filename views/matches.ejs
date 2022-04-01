@@ -15,13 +15,15 @@
     </head>
     <body>
         <div class="row">
+            <% users.forEach(function (user, i) { %> 
+            <%if(i % 3 === 0) { %>
             <div class="col-4 d-flex justify-content-left">
               <div class="card" style="width: 50rem; height: 50rem">
                 <div class="card-body">
                   <div class="d-flex flex-column align-items-center text-center">
                     <img src="https://via.placeholder.com/150x150/4169E1/000000" alt="avatar" class="rounded-circle" width="200" height="200">
                     <div class="mt-3">
-                      <h4 style="font-size: 30px"> John Doe</h4>
+                      <h4 style="font-size: 30px"> <%= user.username%></h4>
                       <div class="body-font">
                       <p class="text-secondary mb-1">Specialty: </p>
                       <p class="text-muted font-size-sm">Hometown: </p>
@@ -36,6 +38,9 @@
                 </div>
               </div>
             </div>
+            <% }%>
+                
+            <% if((i + 1) % 3 === 0) { %>
 
             <div class="col-4 d-flex justify-content-center">
                 <div class="card" style="width: 50rem; height: 50rem">
@@ -43,7 +48,7 @@
                     <div class="d-flex flex-column align-items-center text-center">
                       <img src="https://via.placeholder.com/150x150/4169E1/000000" alt="avatar" class="rounded-circle" width="200" height="200">
                       <div class="mt-3">
-                        <h4 style="font-size: 30px"> John Doe</h4>
+                        <h4 style="font-size: 30px"> <%= user.username%></h4>
                         <div class="body-font">
                         <p class="text-secondary mb-1">Specialty: </p>
                         <p class="text-muted font-size-sm">Hometown: </p>
@@ -58,13 +63,16 @@
                   </div>
                 </div>
               </div>
+              <% } %>
+
+             <% if((i + 2) % 3 === 0) {%>
               <div class="col-4 d-flex justify-content-right">
                 <div class="card" style="width: 50rem; height: 50rem">
                   <div class="card-body">
                     <div class="d-flex flex-column align-items-center text-center">
                       <img src="https://via.placeholder.com/150x150/4169E1/000000" alt="avatar" class="rounded-circle" width="200" height="200">
                       <div class="mt-3">
-                        <h4 style="font-size: 30px"> John Doe</h4>
+                        <h4 style="font-size: 30px"> <%= user.username%></h4>
                         <div class="body-font">
                         <p class="text-secondary mb-1">Specialty: </p>
                         <p class="text-muted font-size-sm">Hometown: </p>
@@ -80,6 +88,8 @@
                 </div>
               </div>
         </div>
+        <% } %>
+        <% })%>
 
     </body>
 
