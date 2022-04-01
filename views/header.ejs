@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/dashboard">Question Mingle</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/dashboard">Home</a></li>
+                <li><a href="/createpost">Create Post</a></li>
+                <li><a href="/posthistory">Post History</a></li>
+                <li><a href="/tutors">Tutors</a></li>
+                <li><a href="/matches">View Matches</a></li>
+                <li><a href="/payment">Make a Payment</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-center">
+                <div>
+                    <form action="/search" method="POST">
+                        <input type="text" placeholder="Search.." name="search">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+
+                <div class="results-container">
+                    <ul class="results-list" id="list">
+
+                    </ul>
+                </div>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#"><span class="glyphicon glyphicon-user"></span> Switch to Tutor</a></li>
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="/">Settings<span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/userprofile">Edit Profile</a></li>
+                        <li><a href="#">Change Password</a></li>
+                        <li><a href="#">Help</a></li>
+                    </ul>
+                <li><a href="/"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+</body>
+
+</html>
+
+<style>
+    body {
+        background-color: #edf2f4;
+    }
+
+
+    .topnav .search-container button {
+        float: right;
+        padding-top: 20px;
+        margin-top: 40px;
+        margin-right: 2000px;
+        background: #edf2f4;
+        font-size: 17px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .topnav .search-container button:hover {
+        background: #edf2f4;
+    }
+</style>
