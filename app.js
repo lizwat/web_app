@@ -54,6 +54,15 @@ app.get("/createpost", (req, res) => {
     res.render("createpost");
 });
 
+app.get("/matches", (req, res)=>{
+    var users =  await User.find({});
+    res.render("matches", {"users": users});
+})
+
+app.get("/payment", (req, res)=>{
+    res.render("payment");
+})
+
 const postSchema = {
     class: String,
     topic: String,
