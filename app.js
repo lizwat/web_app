@@ -59,8 +59,14 @@ app.get("/matches", async (req, res)=>{
     res.render("matches", {"users": users});
 })
 
+app.post("/matches", async (req, res)=>{
+    let username = req.body.username;
+    var user = await User.findOne({username: username});
+    res.render("payment", {"user": user});
+})
+
 app.get("/payment", (req, res)=>{
-    res.render("payment");
+    res.render("payment", {"user": user});
 })
 
 const postSchema = {

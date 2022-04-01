@@ -14,6 +14,7 @@
  
     </head>
     <body>
+    <form method="POST" action="/matches">
         <div class="row">
             <% users.forEach(function (user, i) { %> 
             <%if(i % 3 === 0) { %>
@@ -31,7 +32,7 @@
                       <p class="smaller-font">Enterway ethay Englishway exttay erehay atthay ouyay antway 
                         anslatedtray intoway</p>
                       <button class="btn btn-primary ">Match</button>
-                      <button class="btn btn-outline-primary">Message</button>
+                      <button class="btn btn-outline-primary" name="username" value = "<%= user.username %>">Make a payment</button>
                     </div>
                     </div>
                   </div>
@@ -56,7 +57,7 @@
                         <p class="smaller-font">Enterway ethay Englishway exttay erehay atthay ouyay antway 
                           anslatedtray intoway</p>
                         <button class="btn btn-primary ">Match</button>
-                        <button class="btn btn-outline-primary">Message</button>
+                        <button class="btn btn-outline-primary"name="username" value = "<%= user.username %>" >Make a Payment</button>
                       </div>
                       </div>
                     </div>
@@ -80,7 +81,7 @@
                         <p class="smaller-font">Enterway ethay Englishway exttay erehay atthay ouyay antway 
                           anslatedtray intoway</p>
                         <button class="btn btn-primary ">Match</button>
-                        <button class="btn btn-outline-primary">Message</button>
+                        <button class="btn btn-outline-primary"name="username" value = "<%= user.username %>">Make a Payment</button>
                       </div>
                       </div>
                     </div>
@@ -90,6 +91,7 @@
         </div>
         <% } %>
         <% })%>
+    </form>
 
     </body>
 
