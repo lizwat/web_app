@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
     phone:Number,
     tutor:Boolean,
     telephone:Number,
-    //TODO: include a list of classes for tutors i.e. which classes a tutor is willing to help with
+    classes:Array,
     rateCount: 0,
     rateAverage: 0
 }) ;

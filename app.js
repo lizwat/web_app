@@ -1,3 +1,5 @@
+const { vary } = require('express/lib/response');
+
 const express = require('express'),
     app = express(),
     mongoose = require("mongoose"),
@@ -214,8 +216,12 @@ app.get("/search",(req,res)=>{
 });
 
 app.post("/search", async (req,res)=>{
-
     const input = req.body.search;
+    if (!handleInput(input)){ //input scrubbing - allows text and numbers
+        console.log("Invalid Input")
+        return res.send("<script> alert('Please Enter Valid Text'); window.location =  '/dashboard'; </script>")
+    }
+    //type = typefind(input)
     const results = await User.find({username: {"$regex": input}, tutor:true}) //search queries by username (inclusive) and returns only tutors  
     const output = queryParse(results)
     console.log(output)
@@ -248,6 +254,27 @@ app.listen(process.env.PORT || 3000, function (err) {
 
 });
 
+function handleInput(input){ //scrubs text input from search bar
+    console.log("Text is")
+    inputtext = input;
+    console.log(inputtext)
+    if (inputtext == ""){ //check for empty string
+        console.log("Empty String")
+        return false;
+    } else if (inputtext.match(/[^a-z0-9]/)!=null){ //check for non alphanumeric
+        console.log("Input Handled")
+        return false;
+    }else{
+        console.log("Input Accepted")
+        return true;
+    }
+}
+
+//TODO
+// function typefind(input){
+
+// }
+
 //parse query output
 //TODO: unrated users are left at top of list.  Could be bug, could be feature
 function queryParse(querylist){ //parses db results list for specific datafields - will be expanded as user.js is finalized
@@ -255,13 +282,12 @@ function queryParse(querylist){ //parses db results list for specific datafields
     var result = new Array();
     for(let i =querylist.length-1; i>=0;i--){ //list iterated in reverse as bubblesort orders low to high
         result.push(querylist[i].username);
-        //console.log(querylist[i].username + " - Rate: " + querylist[i].rateAverage)
     }
     return result;
 }
 
 //sort search results
-function bubbleSort(arr, n){ //bubblesort algorithm pulled from https://www.geeksforgeeks.org/bubble-sort/
+function bubbleSort(arr, n){ //bubblesort pulled from https://www.geeksforgeeks.org/bubble-sort/
     var i, j, temp;
     var swapped;
     for (i = 0; i < n - 1; i++) {
