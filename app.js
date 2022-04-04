@@ -11,7 +11,7 @@ const express = require('express'),
     User = require("./models/user");
     PostModel = require("./models/post");
 
-
+    const stripe = require('stripe')('sk_test_51KgxQBLaWiOxnQqJKlygNvObyWrY9R1NFrL7wkURDdSyVPqvMuL7nuojgjmYGjPwMoXEZJlOiWbGLswfju0rsCka00weMZrDen'); // the secret key from dashboard
 //Connecting database
 mongoose.connect("mongodb+srv://steve:chocolate3@cluster0.g7hvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
 app.use(require("express-session")({
@@ -65,12 +65,39 @@ app.get("/matches", async (req, res)=>{
 app.post("/matches", async (req, res)=>{
     let username = req.body.username;
     var user = await User.findOne({username: username});
-    res.render("payment", {"user": user});
+    //res.render("/payment", {"user": user});
 })
 
-app.get("/payment", (req, res)=>{
+/*app.get("/payment", (req, res)=>{
     res.render("payment", {"user": user});
-})
+})*/
+
+app.get("/paymentportal", (req, res) => {
+    app.engine('html', require('ejs').renderFile);
+    app.use(express.static('./views'));
+    res.sendFile(__dirname + '/views/payment.html');
+  })
+  
+  app.post("/charge", (req, res) => {
+      try {
+        stripe.customers
+          .create({          
+            email: req.body.email,
+            source: req.body.stripeToken
+          })
+          .then(customer =>
+            stripe.charges.create({
+              amount: req.body.amount * 100,
+              currency: "usd",
+              customer: customer.id
+            })
+          )
+          .then(() => res.render("paymentsuccess.html"))        
+          .catch(err => console.log(err));
+      } catch (err) {
+        res.send(err);
+      }
+    });
 
 const postSchema = {
     class: String,
