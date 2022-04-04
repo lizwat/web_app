@@ -1,4 +1,4 @@
-const stripe = Stripe("pk_test_51KgxQBLaWiOxnQqJzHWDfzZRRQ8cw7peLoSmXQThxWoJyyYSsEzZTkcsIWDEiB9BG4ELceFqUCi25sKMnuy477vp000SM6YtXl"); // Your publishable key here
+const stripe = Stripe("pk_test_51KgxQBLaWiOxnQqJzHWDfzZRRQ8cw7peLoSmXQThxWoJyyYSsEzZTkcsIWDEiB9BG4ELceFqUCi25sKMnuy477vp000SM6YtXl"); //stripe published key
 const elements = stripe.elements();
 const card = elements.create("card", { hidePostalCode: true });
 card.mount("#payment-card");
