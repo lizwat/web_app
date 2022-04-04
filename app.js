@@ -107,7 +107,6 @@ if (req.body.tutor == "on"){ //check status of tutor textbox
 }else{
     tutor = false;
 }
-console.log(req.body.grade)
     User.register(new User({
         username: req.body.username,
         phone: req.body.phone,
@@ -238,6 +237,16 @@ app.post("/search", async (req,res)=>{
    // res.send(output) //res.send just displays the list.  List will need to be parsed/sent to a new view to actually be helpful
 })
 //end search
+
+//Questionnaire for matchmaker
+app.get("/questionnaire", (req,res)=>{
+    res.render("questionnaire");
+})
+
+app.post("/questionnaire",(req, res) => {
+    res.render("matchmaker")
+})
+//end questionnaire
 
 app.get("/logout",(req,res)=>{
     req.logout();

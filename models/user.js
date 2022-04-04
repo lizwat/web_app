@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema({
     telephone:Number,
     grade:String,
     classes:Array,
+    questionnaire:Array,
     rateCount: 0,
     rateAverage: 0
 }) ;
