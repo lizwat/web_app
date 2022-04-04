@@ -6,6 +6,7 @@ const UserSchema = new mongoose.Schema({
     phone:Number,
     tutor:Boolean,
     telephone:Number,
+    grade:String,
     classes:Array,
     rateCount: 0,
     rateAverage: 0

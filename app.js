@@ -1,4 +1,5 @@
 const { vary } = require('express/lib/response');
+const { on } = require('./models/user');
 
 const express = require('express'),
     app = express(),
@@ -101,12 +102,18 @@ app.get("/changepassword", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-
+if (req.body.tutor == "on"){ //check status of tutor textbox
+    tutor = true;
+}else{
+    tutor = false;
+}
+console.log(req.body.grade)
     User.register(new User({
         username: req.body.username,
         phone: req.body.phone,
         telephone: req.body.telephone,
-        tutor: true,
+        grade: req.body.grade,
+        tutor: tutor,
     }), req.body.password, function (err, user) {
         if (err) {
             console.log(err);
