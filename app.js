@@ -81,7 +81,8 @@ app.get("/paymentportal", (req, res) => {
   app.post("/charge", (req, res) => {
       try {
         stripe.customers
-          .create({          
+          .create({ 
+            name: req.body.name,         
             email: req.body.email,
             source: req.body.stripeToken
           })
@@ -89,7 +90,8 @@ app.get("/paymentportal", (req, res) => {
             stripe.charges.create({
               amount: req.body.amount * 100,
               currency: "usd",
-              customer: customer.id
+              customer: customer.id,
+              description: req.body.description,
             })
           )
           .then(() => res.render("paymentsuccess.html"))        
