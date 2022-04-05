@@ -137,7 +137,9 @@ if (req.body.tutor == "on"){ //check status of tutor textbox
     tutor = false;
 }
     User.register(new User({
-        username: req.body.username,
+        fName: req.body.fName.toLowerCase(),
+        lName: req.body.lName.toLowerCase(),
+        username: req.body.username.toLowerCase(),
         phone: req.body.phone,
         telephone: req.body.telephone,
         grade: req.body.grade,
@@ -251,19 +253,26 @@ app.get("/search",(req,res)=>{
 });
 
 app.post("/search", async (req,res)=>{
-    const input = req.body.search;
+    const input = req.body.search.toLowerCase();
     if (!handleInput(input)){ //input scrubbing - allows text and numbers
         console.log("Invalid Input")
         return res.send("<script> alert('Please Enter Valid Text'); window.location =  '/dashboard'; </script>")
     }
-    //type = typefind(input)
-    const results = await User.find({username: {"$regex": input}, tutor:true}) //search queries by username (inclusive) and returns only tutors  
-    const output = queryParse(results)
+    type = typefind(input)
+    var results = ""
+    if(type == "username"){
+        results = await User.find({username: {"$regex": input}, tutor:true}) //search queries by username (inclusive) and returns only tutors  
+    }else if(type == "name"){ //name might include fname, lname, or username
+        results = await User.find({$or:[{fName: {"$regex": input}}, {lName:{"$regex": input}}, {username: {"$regex": input}}], tutor:true})
+    }else if (type == "course"){
+        results = await User.find({class: {"$elemMatch": input}, tutor:true}) //search queries by username (inclusive) and returns only tutors
+    }
+    console.log(results)
+    const output = queryParse(results,type)
     console.log(output)
+    res.send(output)
+    //res.render("tutors", {"users": results});
 
-    res.render("tutors", {"users": results});
-
-   // res.send(output) //res.send just displays the list.  List will need to be parsed/sent to a new view to actually be helpful
 })
 //end search
 
@@ -300,25 +309,33 @@ app.listen(process.env.PORT || 3000, function (err) {
 });
 
 function handleInput(input){ //scrubs text input from search bar
-    console.log("Text is")
     inputtext = input;
-    console.log(inputtext)
     if (inputtext == ""){ //check for empty string
         console.log("Empty String")
         return false;
     } else if (inputtext.match(/[^a-z0-9]/)!=null){ //check for non alphanumeric
         console.log("Input Handled")
         return false;
-    }else{
+    }else{ //accept only alphanumeric input and continue
         console.log("Input Accepted")
         return true;
     }
 }
 
-//TODO
-// function typefind(input){
-
-// }
+//interperate field to search
+function typefind(input){
+    if (input.match(/[0-9]/)!=null&&input.match(/[a-zA-Z]/)!=null){ //Course Code - ABCD123
+        if(input.match(/[a-zA-Z]/).length==4){
+            type = "course";
+        }
+    }else if(input.match(/[0-9]/)!=null){//Username - abcde123abcde
+        type = "username";
+    }else{//Name - abcd abcd
+        type = "name";
+    }
+    console.log(type)
+    return type;
+}
 
 //parse query output
 //TODO: unrated users are left at top of list.  Could be bug, could be feature
