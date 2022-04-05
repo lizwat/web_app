@@ -267,11 +267,7 @@ app.post("/search", async (req,res)=>{
     }else if (type == "course"){
         results = await User.find({class: {"$elemMatch": input}, tutor:true}) //search queries by username (inclusive) and returns only tutors
     }
-    console.log(results)
-    const output = queryParse(results,type)
-    console.log(output)
-    res.send(output)
-    //res.render("tutors", {"users": results});
+    res.render("tutors", {"users": results});
 
 })
 //end search
