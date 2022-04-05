@@ -10,6 +10,8 @@ const express = require('express'),
     passportLocalMongoose = require("passport-local-mongoose"),
     User = require("./models/user");
     PostModel = require("./models/post");
+    var cookie = require('cookie')
+    const cookieParser = require('cookie-parser')
 
     const stripe = require('stripe')('sk_test_51KgxQBLaWiOxnQqJKlygNvObyWrY9R1NFrL7wkURDdSyVPqvMuL7nuojgjmYGjPwMoXEZJlOiWbGLswfju0rsCka00weMZrDen'); // the secret key from dashboard
 //Connecting database
@@ -19,6 +21,7 @@ app.use(require("express-session")({
     resave: false,
     saveUninitialized: false
 }));
+app.use(cookieParser());
 
 const db = mongoose.connection
 db.on("error", (err) => {
@@ -136,6 +139,7 @@ if (req.body.tutor == "on"){ //check status of tutor textbox
 }else{
     tutor = false;
 }
+res.cookie("currentUser", req.body.username); //current user set as cookie during registration
     User.register(new User({
         fName: req.body.fName.toLowerCase(),
         lName: req.body.lName.toLowerCase(),
@@ -149,9 +153,14 @@ if (req.body.tutor == "on"){ //check status of tutor textbox
             console.log(err);
             res.render("register");
         }
-        passport.authenticate("local")(req, res, function () {
-            res.redirect("/login");
-        })
+        if(tutor){
+            console.log("to courses")
+            res.render("courses");
+        }else{
+            passport.authenticate("local")(req, res, function () {
+                res.redirect("/login");
+            })
+        }
     })
 })
 
@@ -265,7 +274,7 @@ app.post("/search", async (req,res)=>{
     }else if(type == "name"){ //name might include fname, lname, or username
         results = await User.find({$or:[{fName: {"$regex": input}}, {lName:{"$regex": input}}, {username: {"$regex": input}}], tutor:true})
     }else if (type == "course"){
-        results = await User.find({class: {"$elemMatch": input}, tutor:true}) //search queries by username (inclusive) and returns only tutors
+        results = await User.find({class: {"$elemMatch": input}, tutor:true}) //search queries by courslist (inclusive) and returns only tutors
     }
     res.render("tutors", {"users": results});
 
@@ -278,12 +287,26 @@ app.get("/questionnaire", (req,res)=>{
 })
 
 app.post("/questionnaire",(req, res) => {
-    res.render("matchmaker")
+    res.render("matchmaker");
 })
 //end questionnaire
 
+//Course List
+app.get("/courses", async (req, res)=>{
+    res.render("courses");
+ })
+ 
+ app.post("/courses", async (req, res)=> {
+     var username = req.cookies.currentUser;
+     //TODO: Add input from course list into user object
+     res.redirect("/login")
+
+ }) 
+ //End Courselist
+
 app.get("/logout",(req,res)=>{
     req.logout();
+    res.clearCookie()
     res.redirect("/");
 });
 
