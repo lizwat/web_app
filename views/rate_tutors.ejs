@@ -1,83 +1,256 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <title>Star rating</title>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Profile</title>
 </head>
-<% users.forEach(function (user) { %>
-    <li>
-        <h1>You have Selected User: <%= user.username %> </h1>
-        <h1>Rate this User: </h1>
-    </li>
 
 <body>
+    <%- include('header'); -%>
+
+    <% users.forEach(function (user) { %>
+
     <form action="/rate_tutors" method="POST">
         <!--<input type="" name="username" value=<%= user.username %>>Rating:</a>
         -->
-        <div class="rate">
-            <input type="radio" id="star5" name="rate" value="5" />
-            <label for="star5" title="text">5 stars</label>
-            <input type="radio" id="star4" name="rate" value="4" />
-            <label for="star4" title="text">4 stars</label>
-            <input type="radio" id="star3" name="rate" value="3" />
-            <label for="star3" title="text">3 stars</label>
-            <input type="radio" id="star2" name="rate" value="2" />
-            <label for="star2" title="text">2 stars</label>
-            <input type="radio" id="star1" name="rate" value="1" />
-            <label for="star1" title="text">1 star</label>
+        <div class="container emp-profile">
+            <form method="post">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="profile-img">
+                            <img src="https://via.placeholder.com/180x150/4169E1/000000" alt="avatar">
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="profile-head">
+                            <h5>
+                                <%= user.username %> </h5>
+                            <h6>
+                                Web Developer
+                            </h6>
+                            <p class="proile-rating">Rating : <%= user.rateAverage%> / 5 (xxx reviews) </p>
+                            <p class="proile-rating">Rate this user: </p>
+
+                            <div class="rate">
+                                <input type="radio" id="star5" name="rate" value="5" />
+                                <label for="star5" title="text">5 stars</label>
+                                <input type="radio" id="star4" name="rate" value="4" />
+                                <label for="star4" title="text">4 stars</label>
+                                <input type="radio" id="star3" name="rate" value="3" />
+                                <label for="star3" title="text">3 stars</label>
+                                <input type="radio" id="star2" name="rate" value="2" />
+                                <label for="star2" title="text">2 stars</label>
+                                <input type="radio" id="star1" name="rate" value="1" />
+                                <label for="star1" title="text">1 star</label>
+                            </div>
+                            <button name="username" value=<%= user.username %>> Submit</button>
+                            <% }) %>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="profile-work">
+                            <p>LINKS</p>
+                            <a href="">Website Link</a><br />
+                            <p>SKILLS</p>
+                            <a href="">Java</a><br />
+                            <a href="">JavaScript</a><br />
+                            <a href="">CSS</a><br />
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="tab-content profile-tab" id="myTabContent">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>About Me</label><br />
+                                    <p>Hi, I'm xxxx and I'm a developer</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Email</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>email123@gmail.com</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Phone</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>2162372138</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Hourly Rate</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>$20/hr</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Total Sessions Completed</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>0</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-        <button name="username" value=<%= user.username %>> Submit</button>
-<% }) %>
 
+        <style type="text/css">
+            * {
+                margin: 0;
+                padding: 0;
+            }
+
+            .rate {
+                float: left;
+                height: 46px;
+                padding: 0 10px;
+            }
+
+            .rate:not(:checked)>input {
+                position: absolute;
+                top: -9999px;
+            }
+
+            .rate:not(:checked)>label {
+                float: right;
+                width: 1em;
+                overflow: hidden;
+                white-space: nowrap;
+                cursor: pointer;
+                font-size: 30px;
+                color: #ccc;
+            }
+
+            .rate:not(:checked)>label:before {
+                content: '★ ';
+            }
+
+            .rate>input:checked~label {
+                color: #ffc700;
+            }
+
+            .rate:not(:checked)>label:hover,
+            .rate:not(:checked)>label:hover~label {
+                color: #deb217;
+            }
+
+            .rate>input:checked+label:hover,
+            .rate>input:checked+label:hover~label,
+            .rate>input:checked~label:hover,
+            .rate>input:checked~label:hover~label,
+            .rate>label:hover~input:checked~label {
+                color: #c59b08;
+            }
+
+            .emp-profile {
+                padding: 3%;
+                margin-top: 3%;
+                margin-bottom: 3%;
+                border-radius: 0.5rem;
+                background: #fff;
+            }
+
+            .profile-img {
+                text-align: center;
+            }
+
+            .profile-img img {
+                width: 70%;
+                height: 100%;
+            }
+
+            .profile-head h5 {
+                color: #333;
+                font-size: 40px;
+
+            }
+
+            .profile-head h6 {
+                color: #2d91e3;
+                font-size: 15px;
+
+            }
+
+            .proile-rating {
+                font-size: 15px;
+                color: #000000;
+                margin-top: 5%;
+            }
+
+            .proile-rating span {
+                color: #000000;
+                font-size: 15px;
+                font-weight: 600;
+            }
+
+            .profile-head .nav-tabs {
+                margin-bottom: 5%;
+            }
+
+            .profile-head .nav-tabs .nav-link {
+                font-weight: 600;
+                border: none;
+            }
+
+            .profile-head .nav-tabs .nav-link.active {
+                border: none;
+                border-bottom: 2px solid #2d91e3;
+            }
+
+            .profile-work {
+                padding: 14%;
+                margin-top: -15%;
+            }
+
+            .profile-work p {
+                font-size: 15px;
+                color: #818182;
+                font-weight: 600;
+                margin-top: 10%;
+            }
+
+            .profile-work a {
+                text-decoration: none;
+                color: #495057;
+                font-weight: 600;
+                font-size: 15px;
+            }
+
+            .profile-work ul {
+                list-style: none;
+            }
+
+            .profile-tab label {
+                font-weight: 600;
+                font-size: 15px;
+            }
+
+            .profile-tab p {
+                font-weight: 400;
+                color: #2d91e3;
+            }
+        </style>
+
+        <script type="text/javascript"> </script>
 </body>
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-    }
-
-    .rate {
-        float: left;
-        height: 46px;
-        padding: 0 10px;
-    }
-
-    .rate:not(:checked)>input {
-        position: absolute;
-        top: -9999px;
-    }
-
-    .rate:not(:checked)>label {
-        float: right;
-        width: 1em;
-        overflow: hidden;
-        white-space: nowrap;
-        cursor: pointer;
-        font-size: 30px;
-        color: #ccc;
-    }
-
-    .rate:not(:checked)>label:before {
-        content: '★ ';
-    }
-
-    .rate>input:checked~label {
-        color: #ffc700;
-    }
-
-    .rate:not(:checked)>label:hover,
-    .rate:not(:checked)>label:hover~label {
-        color: #deb217;
-    }
-
-    .rate>input:checked+label:hover,
-    .rate>input:checked+label:hover~label,
-    .rate>input:checked~label:hover,
-    .rate>input:checked~label:hover~label,
-    .rate>label:hover~input:checked~label {
-        color: #c59b08;
-    }
-</style>
 
 </html>
