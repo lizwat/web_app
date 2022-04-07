@@ -32,8 +32,12 @@ db.on("error", (err) => {
 })
 const postCollection = db.collection('posts')
 
-passport.serializeUser(User.serializeUser()); //session encoding
-passport.deserializeUser(User.deserializeUser()); //session decoding
+passport.serializeUser(function(user, done) {
+    done(null, user.username);
+ }); //session encoding
+passport.deserializeUser(function(obj, done) {
+    done(null, obj)
+}); //session decoding
 passport.use(new LocalStrategy(User.authenticate()));
 
 app.set("view engine", "ejs");
@@ -120,10 +124,14 @@ app.get("/dashboard", (req, res) => {
     })
 });
 
-app.post("/login", passport.authenticate("local", {
-    successRedirect: "/dashboard",
-    failureRedirect: "/login"
-}), function (req, res) {});
+app.post("/login", passport.authenticate("local"),  setUserIDResponseCookie, function (req, res, next) { //saves username as cookie
+    if (req.user) {
+        res.redirect("/dashboard");
+    } else {
+        res.redirect("/login");
+    }
+    next();
+});
 
 app.get("/register", (req, res) => {
     res.render("register");
@@ -274,10 +282,10 @@ app.post("/search", async (req,res)=>{
     }else if(type == "name"){ //name might include fname, lname, or username
         results = await User.find({$or:[{fName: {"$regex": input}}, {lName:{"$regex": input}}, {username: {"$regex": input}}], tutor:true})
     }else if (type == "course"){
-        results = await User.find({class: {"$elemMatch": input}, tutor:true}) //search queries by courslist (inclusive) and returns only tutors
+        console.log("checking for courses")
+        results = await User.find({classes: {"$elemMatch": { "$regex": input}}, tutor:true}) //search queries by courslist (inclusive) and returns only tutors
     }
     res.render("tutors", {"users": results});
-
 })
 //end search
 
@@ -298,7 +306,8 @@ app.get("/courses", async (req, res)=>{
  
  app.post("/courses", async (req, res)=> {
      var username = req.cookies.currentUser;
-     //TODO: Add input from course list into user object
+     console.log(username)
+     await User.updateOne({username: req.cookies.currentUser},{$push: {classes: req.body.course1}})
      res.redirect("/login")
 
  }) 
@@ -308,6 +317,7 @@ app.get("/logout",(req,res)=>{
     req.logout();
     res.clearCookie()
     res.redirect("/");
+    res.end
 });
 
 function isLoggedIn(req, res, next) {
@@ -344,14 +354,14 @@ function handleInput(input){ //scrubs text input from search bar
 //interperate field to search
 function typefind(input){
     if (input.match(/[0-9]/)!=null&&input.match(/[a-zA-Z]/)!=null){ //Course Code - ABCD123
-        if(input.match(/[a-zA-Z]/).length==4){
+        if(input.match(/[a-zA-Z]/gi).length==4){
             type = "course";
         }
-    }else if(input.match(/[0-9]/)!=null){//Username - abcde123abcde
-        type = "username";
-    }else{//Name - abcd abcd
-        type = "name";
-    }
+        }else if(input.match(/[0-9]/)!=null){//Username - abcde123abcde
+            type = "username";
+        }else{//Name - abcd abcd
+            type = "name";
+        }
     console.log(type)
     return type;
 }
@@ -385,4 +395,21 @@ function bubbleSort(arr, n){ //bubblesort pulled from https://www.geeksforgeeks.
             break;
     }
     return arr
+}
+
+function setUserIDResponseCookie(req, res, next) { //sets cookie during login, pulled from https://stackoverflow.com/questions/12258795/how-to-access-cookie-set-with-passport-js
+    // if user-id cookie is out of date, update it
+    if (req.user?.id != req.cookies["currentUser"]) {
+        // if user successfully signed in, store user-id in cookie
+        if (req.user) {
+            res.cookie("currentUser", req.user.username, {
+                // expire in year 9999 (from: https://stackoverflow.com/a/28289961)
+                expires: new Date(253402300000000),
+                httpOnly: false, // allows JS code to access it
+            });
+        } else {
+            res.clearCookie("currentUser");
+        }
+    }
+    next();
 }
