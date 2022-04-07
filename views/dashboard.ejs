@@ -4,6 +4,7 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -11,49 +12,35 @@
 
 
 <style>
-    .table {
-        width: 90%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-  
-    th.subject {
-        width: 15%
-    }
+   .card {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+   }
 
-    th.user {
-        width: 15%
-    }
-
-    th.date {
-        width: 7%
-    }
+   h1{
+    text-align: center;
+   }
 </style>
 
 <!-- TABLE HEADER -->
-<table id = "table" class = "table" > 
-    <thead>
-        <tr>
-            <th class="Class" scope="col">Class</th>
-            <th class="Topic" scope="col">Topic</th>
-            <th class="Description" scope="col">Description</th>       
-        </tr>
-    </thead>
+<body>
 
-    <tbody>
+    <h1>Posts</h1>
 
     <%postList.forEach(post => {%>
-        <tr>
-            <td><%= post.class %></td>
-            <td><%= post.topic %> </td>
-            <td><%= post.description %> </td>
-        </tr>
+        <div class="card border-primary mb-3"  style="max-width: 90rem; margin: top 10px;">
+            <div class="card-header text-primary">
+               <b> <%= post.class %> — <%= post.topic %></b>
+            </div>
+            <div class="card-body">
+              <p class="card-text"><%= post.description %></p>
+              <footer class="blockquote-footer">user: </footer>
+            </div>
+          </div>
+
     <%})%>
-    
 
-    </tbody>
-
-</table>
 
 </body>
 
