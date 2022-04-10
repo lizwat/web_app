@@ -147,7 +147,11 @@ if (req.body.tutor == "on"){ //check status of tutor textbox
 }else{
     tutor = false;
 }
-res.cookie("currentUser", req.body.username); //current user set as cookie during registration
+res.cookie("currentUser", req.body.username, {
+    // expire in year 9999 (from: https://stackoverflow.com/a/28289961)
+    expires: new Date(253402300000000),
+    httpOnly: false, // allows JS code to access it
+});
     User.register(new User({
         fName: req.body.fName.toLowerCase(),
         lName: req.body.lName.toLowerCase(),
@@ -166,7 +170,7 @@ res.cookie("currentUser", req.body.username); //current user set as cookie durin
             res.render("courses");
         }else{
             passport.authenticate("local")(req, res, function () {
-                res.redirect("/login");
+            res.redirect("/login");
             })
         }
     })
@@ -294,7 +298,7 @@ app.get("/questionnaire", (req,res)=>{
     res.render("questionnaire");
 })
 
-app.post("/questionnaire",(req, res) => {
+app.post("/questionnaire",(req,res) => {
     res.render("matchmaker");
 })
 //end questionnaire
@@ -309,7 +313,6 @@ app.get("/courses", async (req, res)=>{
      console.log(username)
      await User.updateOne({username: req.cookies.currentUser},{$push: {classes: req.body.course1}})
      res.redirect("/login")
-
  }) 
  //End Courselist
 
@@ -334,7 +337,6 @@ app.listen(process.env.PORT || 3000, function (err) {
     } else {
         console.log("Server Started At Port 3000");
     }
-
 });
 
 function handleInput(input){ //scrubs text input from search bar
