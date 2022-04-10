@@ -9,7 +9,7 @@ const express = require('express'),
     LocalStrategy = require("passport-local"),
     passportLocalMongoose = require("passport-local-mongoose"),
     User = require("./models/user");
-    PostModel = require("./models/post");
+    Post = require("./models/post");
     var cookie = require('cookie')
     const cookieParser = require('cookie-parser')
 
@@ -61,7 +61,12 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/createpost", (req, res) => {
+    var usertext = req.cookies.currentUser;
     res.render("createpost");
+});
+
+app.get("/replypost", (req, res) => {
+    res.render("replypost");
 });
 
 app.get("/matches", async (req, res)=>{
@@ -74,6 +79,8 @@ app.post("/matches", async (req, res)=>{
     var user = await User.findOne({username: username});
     //res.render("/payment", {"user": user});
 })
+
+
 
 /*app.get("/payment", (req, res)=>{
     res.render("payment", {"user": user});
@@ -108,13 +115,13 @@ app.get("/paymentportal", (req, res) => {
       }
     });
 
-const postSchema = {
+/*const postSchema = {
     class: String,
     topic: String,
     description: String
 }
 
-const Post = mongoose.model('post', postSchema); 
+const Post = mongoose.model('post', postSchema); */
 
 app.get("/dashboard", (req, res) => {
     Post.find({}, function (err, posts){
@@ -177,7 +184,13 @@ res.cookie("currentUser", req.body.username, {
 })
 
 app.post('/createpost', (req, res) => {
-    postCollection.insertOne(req.body)
+    var username = req.cookies.currentUser;
+    postCollection.insertOne(new Post({
+        topic: req.body.topic,
+        class: req.body.class,
+        description: req.body.description,
+        usertext: req.cookies.currentUser,
+    }))
     .then(result => {
       res.redirect('dashboard')
     })
@@ -185,7 +198,8 @@ app.post('/createpost', (req, res) => {
 })
 
 app.get('/posthistory', (req, res) => {
-    db.collection('posts').find().toArray()
+    var userfind = req.cookies.currentUser;
+    db.collection('posts').find( {usertext: userfind }).toArray()
     .then(results => {
         res.render('posthistory', { posts: results})
       })
