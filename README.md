@@ -12,3 +12,5 @@ Nikhil
 Alex
 Kevin
 Maryam
+
+Note: Despite what it says, this is not the main branch. Please go to login/register instead. Thanks :)
