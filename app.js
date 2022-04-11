@@ -151,6 +151,10 @@ if (req.body.tutor == "on"){ //check status of tutor textbox
 }else{
     tutor = false;
 }
+if (!ValidateEmail(req.body.email)){
+    req.body.email = " ";
+    console.log("Fail")
+}
 res.cookie("currentUser", req.body.username, {
     // expire in year 9999 (from: https://stackoverflow.com/a/28289961)
     expires: new Date(253402300000000),
@@ -163,6 +167,7 @@ res.cookie("currentUser", req.body.username, {
         phone: req.body.phone,
         telephone: req.body.telephone,
         grade: req.body.grade,
+        email: req.body.email,
         tutor: tutor,
     }), req.body.password, function (err, user) {
         if (err) {
@@ -277,14 +282,10 @@ app.post("/tutors", async (req, res)=> {
             console.log("1 document updated");
           }
         });
-       
-
       }
 
       res.send(user);
     });
-
-
 //end tutor rating
 
 //Search
@@ -386,6 +387,15 @@ function typefind(input){
         }
     console.log(type)
     return type;
+}
+
+function ValidateEmail(mail) //pulled from https://www.w3resource.com/javascript/form/email-validation.php
+{
+ if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+  {
+    return (true)
+  }
+    return (false)
 }
 
 //parse query output
