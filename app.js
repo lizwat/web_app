@@ -154,7 +154,7 @@ if (req.body.tutor == "on"){ //check status of tutor textbox
     tutor = false;
 }
 if (!ValidateEmail(req.body.email)){
-    return res.render("<script> alert('Please Enter Valid Text'); window.location =  '/register'; </script>")
+    return res.send("<script> alert('Please Enter A Valid Email'); window.location =  '/register'; </script>")
 }
 res.cookie("currentUser", req.body.username, {
     // expire in year 9999 (from: https://stackoverflow.com/a/28289961)
