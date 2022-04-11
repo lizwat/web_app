@@ -1,6 +1,7 @@
 const { vary } = require('express/lib/response');
 const { on } = require('./models/user');
 
+
 const express = require('express'),
     app = express(),
     mongoose = require("mongoose"),
@@ -12,6 +13,7 @@ const express = require('express'),
     Post = require("./models/post");
     var cookie = require('cookie')
     const cookieParser = require('cookie-parser')
+
 
     const stripe = require('stripe')('sk_test_51KgxQBLaWiOxnQqJKlygNvObyWrY9R1NFrL7wkURDdSyVPqvMuL7nuojgjmYGjPwMoXEZJlOiWbGLswfju0rsCka00weMZrDen'); // the secret key from dashboard
 //Connecting database
@@ -75,6 +77,10 @@ app.post("/matches", async (req, res)=>{
     let username = req.body.username;
     var user = await User.findOne({username: username});
     //res.render("/payment", {"user": user});
+})
+
+app.get("/matchmaker", (req, res)=> {
+    res.render("/matchmaker");
 })
 
 
@@ -152,8 +158,7 @@ if (req.body.tutor == "on"){ //check status of tutor textbox
     tutor = false;
 }
 if (!ValidateEmail(req.body.email)){
-    req.body.email = " ";
-    console.log("Fail")
+    return res.render("<script> alert('Please Enter Valid Text'); window.location =  '/register'; </script>")
 }
 res.cookie("currentUser", req.body.username, {
     // expire in year 9999 (from: https://stackoverflow.com/a/28289961)
