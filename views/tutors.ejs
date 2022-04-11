@@ -18,7 +18,7 @@
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
         integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4=" crossorigin="anonymous" />
-        <%- include('header'); -%>
+    <%- include('header'); -%>
 
     <div class="container">
 
@@ -46,179 +46,175 @@
                 </div>
             </div>
         </div>
-       <form method="POST" action="/tutors">
-        <% users.forEach(function (user, i) { %> 
-            <%if(i % 3 === 0) { %>
-        <div class="row">
-            <div class="col-lg-9">
-                <div class="candidates-listing-item">
-                    <div class="list-grid-item mt-4 p-2">
-                        <div class="row">
-                            <div class="col-md-9">
-                                <div class="candidates-img float-left mr-4">
-                                    <img src="https://via.placeholder.com/150x150/4169E1/000000" alt="avatar"
-                                        class="img-fluid d-block rounded">
-                                </div>
-                              
-                                <div class="candidates-list-desc job-single-meta  pt-2">
-                                    <h5 class="mb-2 f-19"><a href="#" class="text-dark">Name: <%= user.username %></a></h5>
-                                    <ul class="list-inline mb-0">
-                                        <li class="list-inline-item mr-4">
-                                            <p class="text-muted f-15 mb-0"><i class="mdi mdi-account mr-1"></i>Web
-                                                Developer</p>
-                                        </li>
+        <form method="POST" action="/tutors">
 
-                                        <li class="list-inline-item mr-4">
-                                            <p class="f-15 mb-0"><a href="" class="text-muted"><i
-                                                        class="mdi mdi-map-marker mr-1"></i>Location</a></p>
-                                        </li>
-
-                                        <li class="list-inline-item">
-                                            <p class="text-muted f-15 mb-0"><i class=""></i>Rating: <%= user.rateAverage%></p>
-                                        </li>
-                                    </ul>
-                                    <p class="text-muted mt-1 mb-0">Skills : HTML</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="candidates-list-fav-btn text-right">
-                                    <div class="fav-icon">
-                                        <i class="mdi mdi-heart f-20"></i>
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="candidates-listing-item">
+                        <% users.forEach(function (user, i) { %>
+                        <%if(i % 3 === 0) { %>
+                        <div class="list-grid-item mt-4 p-2">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="candidates-img float-left mr-4">
+                                        <img src="https://via.placeholder.com/150x150/4169E1/000000" alt="avatar"
+                                            class="img-fluid d-block rounded">
                                     </div>
-                                    <div class="candidates-listing-btn mt-4">
-                                        <button name= "username" value="<%= user.username %>" href="#" class="btn btn-outline btn-sm">View Profile</button>
+
+                                    <div class="candidates-list-desc job-single-meta  pt-2">
+                                        <h5 class="mb-2 f-19"><a href="#" class="text-dark">Name:
+                                                <%= user.username %></a></h5>
+                                        <ul class="list-inline mb-0">
+                                            <li class="list-inline-item mr-4">
+                                                <p class="text-muted f-15 mb-0"><i class="mdi mdi-account mr-1"></i>Web
+                                                    Developer</p>
+                                            </li>
+
+                                            <li class="list-inline-item mr-4">
+                                                <p class="f-15 mb-0"><a href="" class="text-muted"><i
+                                                            class="mdi mdi-map-marker mr-1"></i>Location</a></p>
+                                            </li>
+
+                                            <li class="list-inline-item">
+                                                <p class="text-muted f-15 mb-0"><i class=""></i>Rating:
+                                                    <%= user.rateAverage%></p>
+                                            </li>
+                                        </ul>
+                                        <p class="text-muted mt-1 mb-0">Skills : HTML</p>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-lg-11 offset-lg-1">
-                                <div class="candidates-item-desc">
-                                    <hr>
-                                    <p class="text-muted mb-2 f-14"> here......</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    
-                    <% }%>
-                
-                    <% if((i + 1) % 3 === 0) { %>
-                    <div class="list-grid-item mt-4 p-2">
-                        <div class="row">
-                            <div class="col-md-9">
-                                <div class="candidates-img float-left mr-4">
-                                    <img src="https://via.placeholder.com/150x150/4169E1/000000" alt=""
-                                        class="img-fluid d-block rounded">
-                                </div>
-                             
-                                
-                                <div class="candidates-list-desc job-single-meta  pt-2">
-                                    <h5 class="mb-2 f-19"><a href="#" class="text-dark">Name: <%= user.username%></a></h5>
-                                    <ul class="list-inline mb-0">
-                                        <li class="list-inline-item mr-4">
-                                            <p class="text-muted f-15 mb-0"><i class="mdi mdi-account mr-1"></i>Web
-                                                Developer</p>
-                                        </li>
-
-                                        <li class="list-inline-item mr-4">
-                                            <p class="f-15 mb-0"><a href="" class="text-muted"><i
-                                                        class="mdi mdi-map-marker mr-1"></i>Location</a></p>
-                                        </li>
-
-                                        <li class="list-inline-item">
-                                            <p class="text-muted f-15 mb-0"><i class=""></i>Rating: <%= user.rateAverage%></p>
-                                        </li>
-                                    </ul>
-                                    <p class="text-muted mt-1 mb-0">Skills : HTML, CSS.</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="candidates-list-fav-btn text-right">
-                                    <div class="fav-icon">
-                                        <i class="mdi mdi-heart f-20"></i>
+                                <div class="col-md-3">
+                                    <div class="candidates-list-fav-btn text-right">
+                                        <div class="candidates-listing-btn mt-4">
+                                            <button name="username" value="<%= user.username %>" href="#"
+                                                class="btn btn-outline btn-sm">View Profile</button>
+                                        </div>
                                     </div>
-                                    <div class="candidates-listing-btn mt-4">
-                                        <button href="#" name= "username" value="<%= user.username %>" class="btn btn-outline btn-sm">View Profile</button>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-11 offset-lg-1">
+                                    <div class="candidates-item-desc">
+                                        <hr>
+                                        <p class="text-muted mb-2 f-14"> here......</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-lg-11 offset-lg-1">
-                                <div class="candidates-item-desc">
-                                    <hr>
-                                    <p class="text-muted mb-2 f-14">Description here.....</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <% } %>
 
-                    <% if((i + 2) % 3 === 0) {%>
-                    <div class="list-grid-item mt-4 p-2">
-                        <div class="row">
-                            <div class="col-md-9">
-                                <div class="candidates-img float-left mr-4">
-                                    <img src="https://via.placeholder.com/150x150/4169E1/000000" alt=""
-                                        class="img-fluid d-block rounded">
-                                </div>
-                                <div class="candidates-list-desc job-single-meta  pt-2">
-                                    <h5 class="mb-2 f-19"><a href="#" class="text-dark">Name: <%= user.username%></a></h5>
-                                    <ul class="list-inline mb-0">
-                                        <li class="list-inline-item mr-4">
-                                            <p class="text-muted f-15 mb-0"><i class="mdi mdi-account mr-1"></i>Web
-                                                Developer</p>
-                                        </li>
+                        <% }%>
 
-                                        <li class="list-inline-item mr-4">
-                                            <p class="f-15 mb-0"><a href="" class="text-muted"><i
-                                                        class="mdi mdi-map-marker mr-1"></i>Location</a></p>
-                                        </li>
-
-                                        <li class="list-inline-item">
-                                            <p class="text-muted f-15 mb-0"><i class=""></i>Rating: <%= user.rateAverage%></p>
-                                        </li>
-                                    </ul>
-                                    <p class="text-muted mt-1 mb-0">Skills : HTML, CSS.</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="candidates-list-fav-btn text-right">
-                                    <div class="fav-icon">
-                                        <i class="mdi mdi-heart f-20"></i>
+                        <% if((i + 1) % 3 === 0) { %>
+                        <div class="list-grid-item mt-4 p-2">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="candidates-img float-left mr-4">
+                                        <img src="https://via.placeholder.com/150x150/4169E1/000000" alt=""
+                                            class="img-fluid d-block rounded">
                                     </div>
-                                    <div class="candidates-listing-btn mt-4">
-                                        <button href="#" name= "username" value="<%= user.username %>" class="btn btn-outline btn-sm">View Profile</button>
+
+
+                                    <div class="candidates-list-desc job-single-meta  pt-2">
+                                        <h5 class="mb-2 f-19"><a href="#" class="text-dark">Name:
+                                                <%= user.username%></a></h5>
+                                        <ul class="list-inline mb-0">
+                                            <li class="list-inline-item mr-4">
+                                                <p class="text-muted f-15 mb-0"><i class="mdi mdi-account mr-1"></i>Web
+                                                    Developer</p>
+                                            </li>
+
+                                            <li class="list-inline-item mr-4">
+                                                <p class="f-15 mb-0"><a href="" class="text-muted"><i
+                                                            class="mdi mdi-map-marker mr-1"></i>Location</a></p>
+                                            </li>
+
+                                            <li class="list-inline-item">
+                                                <p class="text-muted f-15 mb-0"><i class=""></i>Rating:
+                                                    <%= user.rateAverage%></p>
+                                            </li>
+                                        </ul>
+                                        <p class="text-muted mt-1 mb-0">Skills : HTML, CSS.</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="candidates-list-fav-btn text-right">
+                                        <div class="candidates-listing-btn mt-4">
+                                            <button href="#" name="username" value="<%= user.username %>"
+                                                class="btn btn-outline btn-sm">View Profile</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                   
 
-                        <div class="row">
-                            <div class="col-lg-11 offset-lg-1">
-                                <div class="candidates-item-desc">
-                                    <hr>
-                                    <p class="text-muted mb-2 f-14">Description here....</p>
+                            <div class="row">
+                                <div class="col-lg-11 offset-lg-1">
+                                    <div class="candidates-item-desc">
+                                        <hr>
+                                        <p class="text-muted mb-2 f-14">Description here.....</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <% } %>
-                    </div>
-        
 
+                        <% if((i + 2) % 3 === 0) {%>
+                        <div class="list-grid-item mt-4 p-2">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="candidates-img float-left mr-4">
+                                        <img src="https://via.placeholder.com/150x150/4169E1/000000" alt=""
+                                            class="img-fluid d-block rounded">
+                                    </div>
+                                    <div class="candidates-list-desc job-single-meta  pt-2">
+                                        <h5 class="mb-2 f-19"><a href="#" class="text-dark">Name:
+                                                <%= user.username%></a></h5>
+                                        <ul class="list-inline mb-0">
+                                            <li class="list-inline-item mr-4">
+                                                <p class="text-muted f-15 mb-0"><i class="mdi mdi-account mr-1"></i>Web
+                                                    Developer</p>
+                                            </li>
+
+                                            <li class="list-inline-item mr-4">
+                                                <p class="f-15 mb-0"><a href="" class="text-muted"><i
+                                                            class="mdi mdi-map-marker mr-1"></i>Location</a></p>
+                                            </li>
+
+                                            <li class="list-inline-item">
+                                                <p class="text-muted f-15 mb-0"><i class=""></i>Rating:
+                                                    <%= user.rateAverage%></p>
+                                            </li>
+                                        </ul>
+                                        <p class="text-muted mt-1 mb-0">Skills : HTML, CSS.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="candidates-list-fav-btn text-right">
+                                        <div class="candidates-listing-btn mt-4">
+                                            <button href="#" name="username" value="<%= user.username %>"
+                                                class="btn btn-outline btn-sm">View Profile</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-11 offset-lg-1">
+                                    <div class="candidates-item-desc">
+                                        <hr>
+                                        <p class="text-muted mb-2 f-14">Description here....</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                        <% })%>
+                    </div>
                 </div>
             </div>
-        </div>
-        <% })%>
-    </form>
+        </form>
 
         <div class="row">
             <div class="col-lg-12">
