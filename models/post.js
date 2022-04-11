@@ -5,7 +5,7 @@ const PostSchema = new mongoose.Schema({
     topic:String,
     description:String,
     replies : [{
-        type: String
+        type: String,
     }]
 }) ;
 const Post = mongoose.model("Post",PostSchema);

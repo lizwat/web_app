@@ -43,8 +43,23 @@
             </div>
             <div class="card-body">
               <p class="card-text"><%= post.description %></p>
+              <p class="card-text"><%= post.replies %></p>
               <footer class="blockquote-footer">user: <%= post.usertext %></footer>
-              <a href="/replypost"  class="btn btn-outline-primary"name="replypost" >Comment </a>
+              <button name= "comment" value="<%= post.description %>" href="#" class="btn btn-outline btn-sm">Comment</button>
+              
+              <%# fix the way other replies look  %>
+              <%# make the comment form below show only if reply is clicked, otherwise its not visible %>
+              
+              <form action="/replypost" method="POST">
+              <div class="reply-block"> 
+               
+                  <label for="reply"> Reply</label>
+                  <textarea rows="5" input type="text" class="form-control" name="reply"></textarea>
+                <button class="reply-submit" >send</button>
+                <button class="reply-cancel">cancel</button>
+              </div>
+              </form>
+
             </div>
           </div>
 

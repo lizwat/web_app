@@ -65,9 +65,6 @@ app.get("/createpost", (req, res) => {
     res.render("createpost");
 });
 
-app.get("/replypost", (req, res) => {
-    res.render("replypost");
-});
 
 app.get("/matches", async (req, res)=>{
     var users =  await User.find({});
@@ -182,6 +179,15 @@ res.cookie("currentUser", req.body.username, {
         }
     })
 })
+
+app.post("/replypost", (req, res) => {
+    postCollection.updateOne({description: req.body.description}, {$push:{ replies: req.body.reply}}
+    )
+    .then(result => {
+      res.redirect('dashboard')
+    })
+    .catch(error => console.error(error))
+});
 
 app.post('/createpost', (req, res) => {
     var username = req.cookies.currentUser;
