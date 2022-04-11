@@ -79,8 +79,6 @@ app.post("/matches", async (req, res)=>{
     //res.render("/payment", {"user": user});
 })
 
-
-
 /*app.get("/payment", (req, res)=>{
     res.render("payment", {"user": user});
 })*/
@@ -168,14 +166,14 @@ res.cookie("currentUser", req.body.username, {
         phone: req.body.phone,
         telephone: req.body.telephone,
         grade: req.body.grade,
+        phone: req.body.phone,
         email: req.body.email,
         tutor: tutor,
     }), req.body.password, function (err, user) {
         if (err) {
             console.log(err);
             res.render("register");
-        }
-        if(tutor){
+        }else if(tutor){
             console.log("to courses")
             res.render("courses");
         }else{
