@@ -79,6 +79,12 @@ app.post("/matches", async (req, res)=>{
     //res.render("/payment", {"user": user});
 })
 
+app.get("/matchmaker", (req, res)=> {
+    res.render("/matchmaker");
+})
+
+
+
 /*app.get("/payment", (req, res)=>{
     res.render("payment", {"user": user});
 })*/
