@@ -8,7 +8,15 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-   
+    
+
+    <script type="text/javascript">
+      function showForm() {
+          document.getElementById('form').style.display = 'block';
+      }
+    </script>
+
+
 
 </head>
 <%- include('header') -%>
@@ -36,29 +44,40 @@
 
     <h1><b>Posts</b></h1>
 
-    <%postList.forEach(post => {%>
+    <%postList.reverse().forEach(post => {%>
         <div class="card border-primary mb-3"  style="max-width: 90rem; margin: top 10px;">
             <div class="card-header text-primary">
                <b> <%= post.class %> — <%= post.topic %></b>
             </div>
             <div class="card-body">
               <p class="card-text"><%= post.description %></p>
-              <p class="card-text"><%= post.replies %></p>
+               
+              <!--REPLY FORMATTING-->
+              <ul>
+                <% for(var i=0; i< post.replies.length; i++) { %>
+                    <li>
+                        <%= post.replies[i] %>
+                    </li>
+                <% } %>
+            </ul>
+            
+
               <footer class="blockquote-footer">user: <%= post.usertext %></footer>
-              <button name= "comment" value="<%= post.description %>" href="#" class="btn btn-outline btn-sm">Comment</button>
+              <button onclick="showForm()" name= "comment" value="<%= post.description %>" href="#" class="btn btn-outline btn-sm">Comment</button>
               
               <%# fix the way other replies look  %>
               <%# make the comment form below show only if reply is clicked, otherwise its not visible %>
               
-              <form action="/replypost" method="POST">
-              <div class="reply-block"> 
-               
-                  <label for="reply"> Reply</label>
-                  <textarea rows="5" input type="text" class="form-control" name="reply"></textarea>
-                <button class="reply-submit" >send</button>
-                <button class="reply-cancel">cancel</button>
-              </div>
-              </form>
+        
+                <form action="/replypost" method="POST" id="form">
+                <div class="reply-block"> 
+                
+                    <label for="reply"> Reply</label>
+                    <textarea rows="5" input type="text" class="form-control" name="reply"></textarea>
+                  <button class="reply-submit" >send</button>
+                  <button class="reply-cancel">cancel</button>
+                </div>
+                </form>
 
             </div>
           </div>
@@ -67,6 +86,8 @@
 
 
 </body>
+
+
 
 </html>
 
