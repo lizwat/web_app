@@ -26,6 +26,8 @@ app.use(require("express-session")({
 }));
 app.use(cookieParser());
 
+const arr = [];
+
 const db = mongoose.connection
 db.on("error", (err) => {
     console.error(`err: ${err}`)
@@ -191,14 +193,27 @@ res.cookie("currentUser", req.body.username, {
     })
 })
 
-app.post("/replypost", (req, res) => {
-    postCollection.updateOne({description: req.body.description}, {$push:{ replies: req.body.reply}}
+
+app.post("/replypost", async (req, res) => {
+    var x = req.body.reply;
+    var y = req.body.descriptionid;
+    console.log(x, y);
+    console.log(await postCollection.findOne({uniqueid: y}));
+    postCollection.updateOne({uniqueid: y}, {$push:{ replies: x}}
     )
     .then(result => {
       res.redirect('dashboard')
     })
     .catch(error => console.error(error))
 });
+
+function numbergenerator(){
+    xo = Math.floor(Math.random()*100);
+    while (arr.includes(xo))(
+        xo = Math.floor(Math.random()*100)
+    )
+    return xo;   
+}
 
 app.post('/createpost', (req, res) => {
     var username = req.cookies.currentUser;
@@ -207,6 +222,7 @@ app.post('/createpost', (req, res) => {
         class: req.body.class,
         description: req.body.description,
         usertext: req.cookies.currentUser,
+        uniqueid: numbergenerator(),
     }))
     .then(result => {
       res.redirect('dashboard')
