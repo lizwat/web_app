@@ -12,7 +12,8 @@ const express = require('express'),
     User = require("./models/user");
     Post = require("./models/post");
     var cookie = require('cookie')
-    const cookieParser = require('cookie-parser')
+    const cookieParser = require('cookie-parser');
+const { compileQueryParser } = require('express/lib/utils');
 
 
     const stripe = require('stripe')('sk_test_51KgxQBLaWiOxnQqJKlygNvObyWrY9R1NFrL7wkURDdSyVPqvMuL7nuojgjmYGjPwMoXEZJlOiWbGLswfju0rsCka00weMZrDen'); // the secret key from dashboard
@@ -335,16 +336,25 @@ app.get("/courses", async (req, res)=>{
  })
  
  app.post("/courses", async (req, res)=> {
-     var username = req.cookies.currentUser;
-     console.log(username)
-     await User.updateOne({username: req.cookies.currentUser},{$push: {classes: req.body.course1}})
+     var inputList = req.body;
+     for(var value in req.body){
+         if(req.body.hasOwnProperty(value)){
+            course = req.body[value];
+            if(course!=""){
+                if(typefind(course)=="course"){
+                   await User.updateOne({username: req.cookies.currentUser},{$push: {classes: course}})
+                }
+            }
+         }
+     }
+     
      res.redirect("/login")
  }) 
  //End Courselist
 
 app.get("/logout",(req,res)=>{
     req.logout();
-    res.clearCookie()
+    res.clearCookie();
     res.redirect("/");
     res.end
 });
@@ -432,6 +442,29 @@ function bubbleSort(arr, n){ //bubblesort pulled from https://www.geeksforgeeks.
             break;
     }
     return arr
+}
+
+async function findMatches(questionnaireResponse){
+    user = await User.find({username: req.cookie.currentUser});
+    if(user.tutor){
+        potentialMatches = await User.find({tutor:false});
+    }else{
+        potentialMatches = await User.find({tutor:true});
+    }
+    potentialMatches.forEach(person=>{
+        score = compare(user,person,questionnaireResponse);
+    })
+
+
+
+    return matchList
+}
+
+function compare(user,person,answer){
+
+
+
+    return score;
 }
 
 function setUserIDResponseCookie(req, res, next) { //sets cookie during login, pulled from https://stackoverflow.com/questions/12258795/how-to-access-cookie-set-with-passport-js
