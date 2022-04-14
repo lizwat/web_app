@@ -83,7 +83,7 @@ app.post("/matches", async (req, res)=>{
 })
 
 app.get("/matchmaker", (req, res)=> {
-    res.render("/matchmaker");
+    res.render("matchmaker");
 })
 
 
