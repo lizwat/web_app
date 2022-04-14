@@ -83,11 +83,13 @@ app.post("/matches", async (req, res)=>{
 })
 
 app.get("/matchmaker", (req, res)=> {
-    processResponses(req.body)
     res.render("matchmaker");
 })
 
-
+app.post("/matchmaker", async (req, res)=>{
+    processResponses(req.body)
+    res.render("matches")
+})
 
 /*app.get("/payment", (req, res)=>{
     res.render("payment", {"user": user});
