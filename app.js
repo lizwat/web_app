@@ -87,7 +87,7 @@ app.get("/matchmaker", (req, res)=> {
 })
 
 app.post("/matchmaker", async (req, res)=>{
-    processResponses(req.body)
+    processResponses(req)
     res.render("matches")
 })
 
@@ -463,11 +463,12 @@ function bubbleSort(arr, n){ //bubblesort pulled from https://www.geeksforgeeks.
     return arr
 }
 
-async function processResponses(response){
+async function processResponses(req){
     for(var value in req.body){
         if(req.body.hasOwnProperty(value)){
-           response = req.body[value];
-            await User.updateOne({username: req.cookies.currentUser},{$push: {questionnaire: response}})
+            currentResponse = req.body[value];
+            console.log(currentResponse)
+            await User.updateOne({username: req.cookies.currentUser},{$push: {questionnaire: currentResponse}})
         }
     }
 }
