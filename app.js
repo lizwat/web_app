@@ -83,6 +83,7 @@ app.post("/matches", async (req, res)=>{
 })
 
 app.get("/matchmaker", (req, res)=> {
+    processResponses(req.body)
     res.render("matchmaker");
 })
 
@@ -460,6 +461,14 @@ function bubbleSort(arr, n){ //bubblesort pulled from https://www.geeksforgeeks.
     return arr
 }
 
+async function processResponses(response){
+    for(var value in req.body){
+        if(req.body.hasOwnProperty(value)){
+           response = req.body[value];
+            await User.updateOne({username: req.cookies.currentUser},{$push: {questionnaire: response}})
+        }
+    }
+}
 async function findMatches(questionnaireResponse){
     user = await User.find({username: req.cookie.currentUser});
     if(user.tutor){
@@ -470,14 +479,12 @@ async function findMatches(questionnaireResponse){
     potentialMatches.forEach(person=>{
         score = compare(user,person,questionnaireResponse);
     })
-
-
-
     return matchList
 }
 
 function compare(user,person,answer){
 
+    
 
 
     return score;
