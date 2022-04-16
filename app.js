@@ -200,8 +200,10 @@ res.cookie("currentUser", req.body.username, {
 app.post("/replypost", async (req, res) => {
     var x = req.body.reply;
     var y = req.body.descriptionid;
-    console.log(x, y);
-    console.log(await postCollection.findOne({uniqueid: y}));
+    //console.log(x, y);
+    /*find('posts', {'uniqueid' : y}, function (err, docs) {
+        console.dir(docs);
+    });*/
     postCollection.updateOne({uniqueid: y}, {$push:{ replies: x}}
     )
     .then(result => {
@@ -209,6 +211,12 @@ app.post("/replypost", async (req, res) => {
     })
     .catch(error => console.error(error))
 });
+
+/*function find (name, query, cb) {
+    mongoose.connection.db.collection(name, function (err, collection) {
+       collection.find(query).toArray(cb);
+   });
+}*/
 
 function numbergenerator(){
     xo = Math.floor(Math.random()*100);
