@@ -45,6 +45,14 @@
         </div>
         <div class="card-body">
         <p class="card-text"><%= post.description %> </p>
+        <!--REPLY FORMATTING-->
+        <ul>
+          <% for(var i=0; i< post.replies.length; i++) { %>
+            <li>
+              <%= post.replies[i] %>
+            </li>
+            <% } %>
+        </ul>
      </div>
 
     </div>
