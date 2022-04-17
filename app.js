@@ -503,8 +503,6 @@ user.toObject();
 score = 0;
 type = "";
     for(i=0; i<12;i++){ //for each question, compare the answer and judge accordingly
-        console.log(user.questionnaire[i]);
-        console.log(tutor.questionnaire[i]);
         //compare binary match --> matching answer should increase score
         if (type == "bmatch"){
             if(user.questionnaire[i]==tutor.questionnaire[i]){
