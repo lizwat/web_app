@@ -7,7 +7,7 @@ const PostSchema = new mongoose.Schema({
     replies : [{
         type: String,
     }], 
-    uniqueid : Number,
+    uniqueid : String,
 }) ;
 const Post = mongoose.model("Post",PostSchema);
 module.exports = Post;
