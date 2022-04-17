@@ -13,8 +13,8 @@ db.on("error", (err) => {
 })
 
 
-for(i = 0; i<iterations, i++){
-    
+for(i = 0; i<iterations; i++){
+
 }
 
 // User.register(new User({
