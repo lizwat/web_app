@@ -52,23 +52,28 @@
             </form>
         -->
 
-        <form method="post" action="">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div id="inputFormRow">
-                        <div class="input-group mb-3">
-                            <input type="text" name="title[]" class="form-control m-input" placeholder="e.g. CSDS 132" autocomplete="off">
-                            <div class="input-group-append">
-                                <button id="removeRow" type="button" class="btn btn-danger">Remove</button>
+            <form method="post" action="">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="inputFormRow">
+                            <div class="input-group mb-3">
+                                <input type="text" name="title[]" class="form-control m-input"
+                                    placeholder="e.g. CSDS 132" autocomplete="off">
+                                <div class="input-group-append">
+                                    <button id="removeRow" type="button" class="btn btn-danger">Remove</button>
+                                </div>
                             </div>
                         </div>
+
+                        <div id="newRow"></div>
+                        <button id="addRow" type="button" class="btn btn-info">Add Course</button>
                     </div>
-        
-                    <div id="newRow"></div>
-                    <button id="addRow" type="button" class="btn btn-info">Add Course</button>
                 </div>
-            </div>
-        </form>
+
+                <button style="float:right" type="submit" class="btn btn-info btn-lg">Continue</button>
+            </form>
+            <br>
+
             <hr>
 
             <p>Don't want to register as a a tutor? <a href="/">Home</a></p>
@@ -85,15 +90,16 @@
             var html = '';
             html += '<div id="inputFormRow">';
             html += '<div class="input-group mb-3">';
-            html += '<input type="text" name="title[]" class="form-control m-input" placeholder="e.g. CSDS 132" autocomplete="off">';
+            html +=
+                '<input type="text" name="title[]" class="form-control m-input" placeholder="e.g. CSDS 132" autocomplete="off">';
             html += '<div class="input-group-append">';
             html += '<button id="removeRow" type="button" class="btn btn-danger">Remove</button>';
             html += '</div>';
             html += '</div>';
-    
+
             $('#newRow').append(html);
         });
-    
+
         // remove row
         $(document).on('click', '#removeRow', function () {
             $(this).closest('#inputFormRow').remove();
