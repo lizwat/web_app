@@ -467,29 +467,57 @@ async function processResponses(req){
     for(var value in req.body){
         if(req.body.hasOwnProperty(value)){
             currentResponse = req.body[value];
-            console.log(currentResponse)
             await User.updateOne({username: req.cookies.currentUser},{$push: {questionnaire: currentResponse}})
         }
     }
+    return findMatches(req.cookies.currentUser);
 }
-async function findMatches(questionnaireResponse){
-    user = await User.find({username: req.cookie.currentUser});
-    if(user.tutor){
-        potentialMatches = await User.find({tutor:false});
-    }else{
-        potentialMatches = await User.find({tutor:true});
-    }
-    potentialMatches.forEach(person=>{
-        score = compare(user,person,questionnaireResponse);
+
+async function findMatches(currentUser){
+    var results = Array.from(Array(2), () => new Array(0));
+    i =0;
+    user = await User.findOne({username: currentUser});
+    user.toObject();
+    potentialMatches = await User.find({tutor:true, questionnaire:{ $exists: true, $not: {$size: 0} }}); //pull all tutors down who have filled the questionnaire from DB to sort through
+    potentialMatches.forEach(tutor=>{
+        score = compare(user,tutor); //compare user and tutor answers to judge match
+        results[0].push(tutor);
+        results[1].push(score);
     })
-    return matchList
+    console.log(results)
+
+
+    //return matchList
 }
 
-function compare(user,person,answer){
-
-    
-
-
+function compare(user,tutor){
+user.toObject();
+score = 0;
+type = "";
+    for(i=0; i<12;i++){ //for each question, compare the answer and judge accordingly
+        console.log(user.questionnaire[i]);
+        console.log(tutor.questionnaire[i]);
+        //compare binary match --> matching answer should increase score
+        if (type == "bmatch"){
+            if(user.questionnaire[i]==tutor.questionnaire[i]){
+                score++;
+            }
+        }
+        //compare binary oppose --> opposing answers should increase score
+        if (type == "bopp"){ 
+            if (user.questionnaire[i]==tutor.questionnaire[i]){
+                score++
+            }
+        }
+        //compare range match --> similar choices should increase score, more similar, greater effect
+        if (type == "rmatch"){
+            score+=(5-(user.questionnaire[i]-tutor.questionnaire[i]))/5;//todo: review this code
+        }
+        //compare range oppose --> different choices should increase score, more different, greater effect
+        if (type == "ropp"){
+            score+=(user.questionnaire[i]-tutor.questionnaire[i])/5;//todo: review this code
+        }
+    }
     return score;
 }
 
