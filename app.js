@@ -369,6 +369,7 @@ app.get("/courses", async (req, res)=>{
             course = req.body[value];
             if(course!=""){
                 if(typefind(course)=="course"){
+                    console.log(course);
                    await User.updateOne({username: req.cookies.currentUser},{$push: {classes: course}})
                 }
             }
@@ -494,6 +495,7 @@ async function findMatches(currentUser){
     })
     console.log(results)
 
+    matchlist = bubblesort(results, results[0].length())
 
     //return matchList
 }
@@ -512,7 +514,7 @@ type = "";
         //compare binary oppose --> opposing answers should increase score
         if (type == "bopp"){ 
             if (user.questionnaire[i]==tutor.questionnaire[i]){
-                score++
+                score++;
             }
         }
         //compare range match --> similar choices should increase score, more similar, greater effect
