@@ -349,6 +349,20 @@ app.post("/search", async (req,res)=>{
 
 //Questionnaire for matchmaker
 app.get("/questionnaire", (req,res)=>{
+    var questions = [
+        ["I prefer to work with visual representations of a concept", "bmatch"],
+        ["I have tutored/been tutored before","bmatch"],
+        ["I prefer putting concepts into words versus mathematical/logical symbols", "rmatch"],
+        ["I have a very structured routine / I prefer to go with the flow", "rmatch"],
+        ["I prefer give/receive positive reinforcement / I prefer to give/receive constructive criticism", "rmatch"],
+        ["I am more objective oriented / I am more process oriented", "rmatch"],
+        ["I prefer working with someone older than me / IDC/ I prefer working with someone younger than me", "ropp"],
+        ["I prefer to focus on the task / I prefer to get to know my tutor", "rmatch"],
+        ["I tend to keep my stuff extremely organized (vs.whatever order makes sense to me)", "rmatch"],
+        ["I prefer to work in a few long sessions versus many frequent short sessions", "bmatch"],
+        ["I prefer to be in control of the learning process / I prefer to be guided in the learning process", "ropp"],
+        ["I work well in high-pressure situations", "bmatch"]
+    ]
     res.render("questionnaire");
 })
 
