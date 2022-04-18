@@ -88,7 +88,7 @@ app.get("/matchmaker", (req, res)=> {
 
 app.post("/matchmaker", async (req, res)=>{
     let quest = req.body.rate1;
-    console.log(quest.value);
+    console.log(quest);
     var users = processResponses(req);
     console.log(users);
     res.render("matches", {"users": users});
