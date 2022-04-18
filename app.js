@@ -520,7 +520,13 @@ async function findMatches(currentUser){
     matchlist = bubbleSort2(results, results[0].length)
     console.log("Best Match")
     console.log(matchlist[0][0].username)
-    return matchlist[0]
+    matchusernames = [];
+    for(i=0;i<matchlist[0].length;i++){
+        matchusernames.push(matchlist[0][i].username)
+    }
+    console.log(matchusernames)
+    return matchusernames;
+    
 }
 
 function bubbleSort2(arr, n){ //bubblesort pulled from https://www.geeksforgeeks.org/bubble-sort/
