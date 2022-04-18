@@ -362,7 +362,7 @@ app.get("/questionnaire", (req,res)=>{
         ["I prefer to work in a few long sessions versus many frequent short sessions", "bmatch"],
         ["I prefer to be in control of the learning process / I prefer to be guided in the learning process", "ropp"],
         ["I work well in high-pressure situations", "bmatch"]
-    ]
+    ];
     res.render("questionnaire");
 })
 
