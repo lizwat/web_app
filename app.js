@@ -266,13 +266,13 @@ app.get("/tutors", async (req, res)=>{
 app.post("/tutors", async (req, res)=> {
     let tutor =  req.body.username;
     var user = await User.find({username: tutor})
-    res.send("rate_tutors", {"users": user});
+    res.render("rate_tutors", {"users": user});
 }) 
 
 
 //tutor rating
 
-    app.get("/rate_tutors",(req,res)=>{
+    app.get("/rate_tutors", (req,res)=>{
       res.render("rate_tutors", {"users": user});
     });
 
