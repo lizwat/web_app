@@ -363,19 +363,22 @@ app.get("/courses", async (req, res)=>{
  })
  
  app.post("/courses", async (req, res)=> {
-     var inputList = req.body;
-     for(var value in req.body){
-         if(req.body.hasOwnProperty(value)){
-            course = req.body[value];
-            if(course!=""){
-                if(typefind(course)=="course"){
-                    console.log(course);
-                   await User.updateOne({username: req.cookies.currentUser},{$push: {classes: course}})
+     for(var title in req.body){
+         if(req.body.hasOwnProperty(title)){
+            course = req.body[title];
+            console.log(course[0]);
+             for(i=0;i<course.length;i++){
+                console.log(course[i])
+                if(course[i]!=""){
+                    if(typefind(course[i])=="course"){
+                        //console.log(course);
+                       await User.updateOne({username: req.cookies.currentUser},{$push: {classes: course[i]}})
+                    }
                 }
-            }
+             }
          }
      }
-     
+
      res.redirect("/login")
  }) 
  //End Courselist
