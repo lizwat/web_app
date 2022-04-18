@@ -85,12 +85,15 @@ app.post("/matches", async (req, res)=>{
 app.get("/matchmaker", (req, res)=> {
     res.render("matchmaker");
 }) */
-/** 
+
 app.post("/matchmaker", async (req, res)=>{
-    processResponses(req)
-    res.render("matches")
+    let quest = req.body.rate1;
+    console.log(quest.value);
+    var users = processResponses(req);
+    console.log(users);
+    res.render("matches", {"users": users});
 })
-*/
+
 /*app.get("/payment", (req, res)=>{
     res.render("payment", {"user": user});
 })*/
@@ -364,7 +367,7 @@ app.get("/matchmaker", (req,res)=>{
         ["I prefer to be in control of the learning process / I prefer to be guided in the learning process", "ropp"],
         ["I work well in high-pressure situations", "bmatch"]
     ]
-    console.log(questions[0][0]);
+
     res.render("matchmaker.ejs", {questions: questions});
 }) 
 /** 
@@ -514,7 +517,7 @@ async function findMatches(currentUser){
     })
     console.log(results)
 
-    matchlist = bubblesort(results, results[0].length())
+    matchlist = bubbleSort(results, results[0].length())
 
     //return matchList
 }
