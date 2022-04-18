@@ -517,9 +517,32 @@ async function findMatches(currentUser){
     })
     console.log(results)
 
-    matchlist = bubbleSort(results, results[0].length())
+    matchlist = bubbleSort2(results, results[0].length)
+    console.log("Best Match")
+    console.log(matchlist[0][0].username)
+    return matchlist[0]
+}
 
-    //return matchList
+function bubbleSort2(arr, n){ //bubblesort pulled from https://www.geeksforgeeks.org/bubble-sort/
+    var i, j, temp;
+    var swapped;
+    for (i = 0; i < n - 1; i++) {
+        swapped = false;
+        for (j = 0; j < n - i - 1; j++) {
+            if (arr[1][j] > arr[1][j + 1]) { //sorts in order of rate avg.  May apply weight for ratecount in the future.
+                temp = arr[0][j];
+                temp2 = arr[1][j];
+                arr[0][j] = arr[0][j + 1];
+                arr[1][j] = arr[1][j + 1];
+                arr[0][j + 1] = temp;
+                arr[1][j + 1] = temp2;
+                swapped = true;
+            }
+        }
+        if (swapped == false)
+            break;
+    }
+    return arr
 }
 
 function compare(user,tutor){
