@@ -81,14 +81,17 @@ app.post("/matches", async (req, res)=>{
     var user = await User.findOne({username: username});
     //res.render("/payment", {"user": user});
 })
-
+/** 
 app.get("/matchmaker", (req, res)=> {
     res.render("matchmaker");
-})
+}) */
 
 app.post("/matchmaker", async (req, res)=>{
-    processResponses(req)
-    res.render("matches")
+    let quest = req.body.rate1;
+    console.log(quest.value);
+    var users = processResponses(req);
+    console.log(users);
+    res.render("matches", {"users": users});
 })
 
 /*app.get("/payment", (req, res)=>{
@@ -259,7 +262,7 @@ app.get("/tutors", async (req, res)=>{
 app.post("/tutors", async (req, res)=> {
     let tutor =  req.body.username;
     var user = await User.find({username: tutor})
-    res.render("rate_tutors", {"users": user});
+    res.send("rate_tutors", {"users": user});
 }) 
 
 
@@ -348,7 +351,8 @@ app.post("/search", async (req,res)=>{
 //end search
 
 //Questionnaire for matchmaker
-app.get("/questionnaire", (req,res)=>{
+
+app.get("/matchmaker", (req,res)=>{
     var questions = [
         ["I prefer to work with visual representations of a concept", "bmatch"],
         ["I have tutored/been tutored before","bmatch"],
@@ -362,13 +366,14 @@ app.get("/questionnaire", (req,res)=>{
         ["I prefer to work in a few long sessions versus many frequent short sessions", "bmatch"],
         ["I prefer to be in control of the learning process / I prefer to be guided in the learning process", "ropp"],
         ["I work well in high-pressure situations", "bmatch"]
-    ];
-    res.render("questionnaire");
-})
+    ]
 
+    res.render("matchmaker.ejs", {questions: questions});
+}) 
+/** 
 app.post("/questionnaire",(req,res) => {
-    res.render("matchmaker");
-})
+    res.render("matchmaker",);
+}) */
 //end questionnaire
 
 //Course List
@@ -512,7 +517,7 @@ async function findMatches(currentUser){
     })
     console.log(results)
 
-    matchlist = bubblesort(results, results[0].length())
+    matchlist = bubbleSort(results, results[0].length())
 
     //return matchList
 }
