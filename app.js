@@ -87,11 +87,15 @@ app.get("/matchmaker", (req, res)=> {
 }) */
 
 app.post("/matchmaker", async (req, res)=>{
-    let quest = req.body.rate1;
-    console.log(quest);
-    var users = processResponses(req);
-    console.log(users);
-    res.render("matches", {"users": users});
+    processResponses(req);
+    var users = findMatches(req.cookies.currentUser);
+    var resUsers = Promise.resolve(users)
+    resUsers.then(function(list){
+        console.log(list[0].username);
+        res.render("matches", {"users": list});
+    });
+    
+    
 })
 
 /*app.get("/payment", (req, res)=>{
@@ -501,7 +505,6 @@ async function processResponses(req){
             await User.updateOne({username: req.cookies.currentUser},{$push: {questionnaire: currentResponse}})
         }
     }
-    return findMatches(req.cookies.currentUser);
 }
 
 async function findMatches(currentUser){
@@ -509,17 +512,20 @@ async function findMatches(currentUser){
     i =0;
     user = await User.findOne({username: currentUser});
     user.toObject();
-    potentialMatches = await User.find({tutor:true, questionnaire:{ $exists: true, $not: {$size: 0} }}); //pull all tutors down who have filled the questionnaire from DB to sort through
+    potentialMatches = await User.find({tutor:true, username: {$ne : currentUser}, questionnaire:{ $exists: true, $not: {$size: 0} }}); //pull all tutors down who have filled the questionnaire from DB to sort through
     potentialMatches.forEach(tutor=>{
         score = compare(user,tutor); //compare user and tutor answers to judge match
         results[0].push(tutor);
         results[1].push(score);
     })
-    console.log(results)
-
+    
     matchlist = bubbleSort2(results, results[0].length)
+    
     console.log("Best Match")
     console.log(matchlist[0][0].username)
+    console.log("Score")
+    console.log(matchlist[1][0])
+    //const matches = await Promise.all(matchlist[0])
     return matchlist[0];
     // matchusernames = [];
     // for(i=0;i<matchlist[0].length;i++){
@@ -549,14 +555,39 @@ function bubbleSort2(arr, n){ //bubblesort pulled from https://www.geeksforgeeks
         if (swapped == false)
             break;
     }
-    return arr
+    var result = Array.from(Array(2), () => new Array(0));
+    for(let i =arr.length-1; i>=0;i--){ //list iterated in reverse as bubblesort orders low to high
+        result[0].push(arr[0][i]);
+        result[1].push(arr[1][i]);
+    }
+    console.log("######BUBBLESORT######")
+    console.log(result[0][0])
+    console.log(result[0][1])
+    return result
 }
 
 function compare(user,tutor){
 user.toObject();
 score = 0;
 type = "";
+
+var questions = [
+    ["I prefer to work with visual representations of a concept", "bmatch"],
+    ["I have tutored/been tutored before","bmatch"],
+    ["I prefer putting concepts into words versus mathematical/logical symbols", "rmatch"],
+    ["I have a very structured routine / I prefer to go with the flow", "rmatch"],
+    ["I prefer give/receive positive reinforcement / I prefer to give/receive constructive criticism", "rmatch"],
+    ["I am more objective oriented / I am more process oriented", "rmatch"],
+    ["I prefer working with someone older than me / IDC/ I prefer working with someone younger than me", "ropp"],
+    ["I prefer to focus on the task / I prefer to get to know my tutor", "rmatch"],
+    ["I tend to keep my stuff extremely organized (vs.whatever order makes sense to me)", "rmatch"],
+    ["I prefer to work in a few long sessions versus many frequent short sessions", "bmatch"],
+    ["I prefer to be in control of the learning process / I prefer to be guided in the learning process", "ropp"],
+    ["I work well in high-pressure situations", "bmatch"]
+]
+
     for(i=0; i<12;i++){ //for each question, compare the answer and judge accordingly
+        type = questions[i][1];
         //compare binary match --> matching answer should increase score
         if (type == "bmatch"){
             if(user.questionnaire[i]==tutor.questionnaire[i]){
@@ -578,7 +609,7 @@ type = "";
             score+=(user.questionnaire[i]-tutor.questionnaire[i])/5;//todo: review this code
         }
     }
-    return score;
+    return score
 }
 
 function setUserIDResponseCookie(req, res, next) { //sets cookie during login, pulled from https://stackoverflow.com/questions/12258795/how-to-access-cookie-set-with-passport-js
