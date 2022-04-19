@@ -1,5 +1,6 @@
 const { vary } = require('express/lib/response');
 const { on } = require('./models/user');
+const ObjectID = require('mongodb').ObjectID;
 
 const express = require('express'),
     app = express(),
@@ -23,7 +24,16 @@ const Strategy = require('passport-local').Strategy;
 const session = require('express-session');
 const flash = require('connect-flash');
 //Connecting to Mongo Client 
-
+MongoClient.connect('mongodb+srv://steve:chocolate3@cluster0.g7hvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+(err, client) => {
+    if (err) {
+    throw err;
+    }
+    const db = client.db('myFirstDatabase');
+    const users = db.collection('users');
+    app.locals.users = users;
+    console.log("connected to database");
+});
 
 //Connecting database
 mongoose.connect("mongodb+srv://steve:chocolate3@cluster0.g7hvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
@@ -59,15 +69,77 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use((req, res, next) => {
+    res.locals.loggedIn = req.isAuthenticated();
+    next();
+});
+
 //=======================
 //      R O U T E S
 //=======================
+
+
 app.get("/", (req, res) => {
     res.render("home");
 })
-app.get("/userprofile", isLoggedIn, (req, res) => {
+/*app.get("/userprofile", isLoggedIn, (req, res) => {
     res.render("userprofile");
-})
+})*/
+
+//userprofileroutes
+app.get('/userprofile', function(req, res, next) {
+    if (!req.isAuthenticated()) { 
+      res.redirect('/login');
+    }
+    console.log("i hit this");
+    res.render("userprofile");
+});
+
+
+// Handle updating user profile data
+// --------------------------------------------------
+app.post('/userprofile', (req, res, next) => {
+    if (!req.isAuthenticated()) {
+      res.redirect('/login');
+    }
+    const users = req.app.locals.users;
+    
+    const { username, fName, lName,
+        email, phone } = req.body;
+    
+    const payload = {
+        username: req.body.username,
+        fName: req.body.fName,
+        lName: req.body.lName,
+        email: req.body.email,
+        phone: req.body.phone,
+        grade: req.body.grade,
+        phone: req.body.phone,
+        email: req.body.email,
+    };
+    var user = User.findOne({username: req.body.username});
+    
+    User.updateOne(user, {payload}, function(err, res){
+        if(err){
+          throw err;
+        }
+        else {
+          console.log("user updated");
+          render("dashboard");
+        }
+      });
+    //const _id = ObjectID(req.user);
+  
+    /*users.updateOne({ _id }, { $set: { username, fName, lName, phone, email } }, (err) => {
+      if (err) {
+        throw err;
+      }
+      
+      res.redirect('/dashboard');
+    });*/
+  });
+
 //Auth Routes
 app.get("/login", (req, res) => {
     res.render("login");
