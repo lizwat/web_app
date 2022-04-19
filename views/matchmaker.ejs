@@ -1,0 +1,295 @@
+<!doctype html>
+<html>
+<%- include('header'); -%>
+
+ <head>
+        <link href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/smart_wizard.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/smart_wizard_theme_arrows.min.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/jquery.smartWizard.min.js"></script>
+ </head>
+ <script>
+     $(document).ready(function(){
+
+        $('#smartwizard').smartWizard({
+        selected: 0,
+        theme: 'arrows',
+        autoAdjustHeight:true,
+        transitionEffect:'fade',
+        showStepURLhash: false,
+
+        });
+
+    });
+
+ </script>
+ <body>
+    <form method="POST" action ="/matchmaker">
+        <%   var questions = [
+        ["I prefer to work with visual representations of a concept", "bmatch"],
+        ["I have tutored/been tutored before","bmatch"],
+        ["I prefer putting concepts into words versus mathematical/logical symbols", "rmatch"],
+        ["I have a very structured routine / I prefer to go with the flow", "rmatch"],
+        ["I prefer give/receive positive reinforcement / I prefer to give/receive constructive criticism", "rmatch"],
+        ["I am more objective oriented / I am more process oriented", "rmatch"],
+        ["I prefer working with someone older than me / IDC/ I prefer working with someone younger than me", "ropp"],
+        ["I prefer to focus on the task / I prefer to get to know my tutor", "rmatch"],
+        ["I tend to keep my stuff extremely organized (vs.whatever order makes sense to me)", "rmatch"],
+        ["I prefer to work in a few long sessions versus many frequent short sessions", "bmatch"],
+        ["I prefer to be in control of the learning process / I prefer to be guided in the learning process", "ropp"],
+        ["I work well in high-pressure situations", "bmatch"]
+    ] %>
+    <div class="container">
+        <div class="justify-content-center"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"> Get Matched With Potential Tutors! </button> </div> <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Rate your level of agreement with the following statements: 5 for strongly agree, 3 for neutral, 1 for strongly disagree</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="smartwizard">
+                            <ul>
+                                <li><a href="#step-1">Step 1<br /><small>Learning Style Info</small></a></li>
+                                <li><a href="#step-2">Step 2<br /><small>Preferences</small></a></li>
+                                <li><a href="#step-3">Step 3<br /><small>Classes</small></a></li>
+                                <li><a href="#step-4">Step 4<br /><small>Confirm </small></a></li>
+                            </ul>
+                            <div class="mt-4">
+                                <div id="step-1">
+                                    <div class = "row">
+                                        <div class="col-md-6"> <%= questions[0][0]%> </div>
+                                        <div class="col-md-6"> <%= questions[1][0]%></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6"> 
+                                            <div class="rate">
+                                                <input type="radio" id="star5" name="rate1" value="<%= JSON.stringify(questions[0].concat([1]))%>" />
+                                                <label for="star5" title="text">yes</label>
+                                                <input type="radio" id="star4" name="rate1" value="<%= JSON.stringify(questions[0].concat([0]))%>" />
+                                                <label for="star4" title="text">no</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="rate">
+                                                <input type="radio" id="star5" name="rate2" value="<%= JSON.stringify(questions[1].concat([1]))%>" />
+                                                <label for="star5" title="text">yes</label>
+                                                <input type="radio" id="star4" name="rate2" value="<%= JSON.stringify(questions[1].concat([0]))%>" />
+                                                <label for="star4" title="text">no</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class = "row">
+                                        <div class="col-md-6"><%= questions[2][0]%> </div>
+                                        <div class="col-md-6"> <%= questions[3][0]%></div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-6"> 
+                                            <div class="rate">
+                                                <input type="radio" id="star5" name="rate3" value="<%= JSON.stringify(questions[2].concat([5]))%>" />
+                                                <label for="star5" title="text">5</label>
+                                                <input type="radio" id="star4" name="rate3" value="<%= JSON.stringify(questions[2].concat([4]))%>" />
+                                                <label for="star4" title="text">4</label>
+                                                <input type="radio" id="star3" name="rate3" value="<%= JSON.stringify(questions[2].concat([3]))%>" />
+                                                <label for="star3" title="text">3</label>
+                                                <input type="radio" id="star2" name="rate3" value="<%= JSON.stringify(questions[2].concat([2]))%>" />
+                                                <label for="star4" title="text">2</label>
+                                                <input type="radio" id="star1" name="rate3" value="<%= JSON.stringify(questions[2].concat([1]))%>" />
+                                                <label for="star1" title="text">1</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6"> 
+                                            <div class="rate">
+                                                <input type="radio" id="star5" name="rate4" value="<%= JSON.stringify(questions[3].concat([5]))%>" />
+                                                <label for="star5" title="text">5</label>
+                                                <input type="radio" id="star4" name="rate4" value="<%= JSON.stringify(questions[3].concat([4]))%>" />
+                                                <label for="star4" title="text">4</label>
+                                                <input type="radio" id="star3" name="rate4" value="<%= JSON.stringify(questions[3].concat([3]))%>" />
+                                                <label for="star3" title="text">3</label>
+                                                <input type="radio" id="star2" name="rate4" value="<%= JSON.stringify(questions[3].concat([2]))%>" />
+                                                <label for="star4" title="text">2</label>
+                                                <input type="radio" id="star1" name="rate4" value="<%= JSON.stringify(questions[3].concat([1]))%>" />
+                                                <label for="star1" title="text">1</label>
+                                            </div>   
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="step-2">
+                                    <div class = "row">
+                                        <div class="col-md-6"> <%= questions[4][0]%>.</div>
+                                        <div class="col-md-6"> <%= questions[5][0]%></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6"> 
+                                            <div class="rate">
+                                                <input type="radio" id="star5" name="rate5" value="<%= JSON.stringify(questions[4].concat([5]))%>" />
+                                                <label for="star5" title="text">5</label>
+                                                <input type="radio" id="star4" name="rate5" value="<%= JSON.stringify(questions[4].concat([4]))%>" />
+                                                <label for="star4" title="text">4</label>
+                                                <input type="radio" id="star3" name="rate5" value="<%= JSON.stringify(questions[4].concat([3]))%>" />
+                                                <label for="star3" title="text">3</label>
+                                                <input type="radio" id="star2" name="rate5" value="<%= JSON.stringify(questions[4].concat([2]))%>" />
+                                                <label for="star4" title="text">2</label>
+                                                <input type="radio" id="star1" name="rate5" value="<%= JSON.stringify(questions[4].concat([1]))%>" />
+                                                <label for="star1" title="text">1</label>
+                                            </div>  
+                                        </div>
+                                        <div class="col-md-6"> 
+                                            <div class="rate">
+                                                <input type="radio" id="star5" name="rate6" value="<%= JSON.stringify(questions[5].concat([5]))%>" />
+                                                <label for="star5" title="text">5</label>
+                                                <input type="radio" id="star4" name="rate6" value="<%= JSON.stringify(questions[5].concat([4]))%>" />
+                                                <label for="star4" title="text">4</label>
+                                                <input type="radio" id="star3" name="rate6" value="<%= JSON.stringify(questions[5].concat([3]))%>" />
+                                                <label for="star3" title="text">3</label>
+                                                <input type="radio" id="star2" name="rate6" value="<%= JSON.stringify(questions[5].concat([2]))%>" />
+                                                <label for="star4" title="text">2</label>
+                                                <input type="radio" id="star1" name="rate6" value="<%= JSON.stringify(questions[5].concat([1]))%>" />
+                                                <label for="star1" title="text">1</label>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                    <div class = "row">
+                                        <div class="col-md-6"> <%= questions[6][0]%></div>
+                                        <div class="col-md-6"> <%= questions[7][0]%></div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            <div class="rate">
+                                                <input type="radio" id="star5" name="rate7" value="<%= JSON.stringify(questions[6].concat([5]))%>" />
+                                                <label for="star5" title="text">5</label>
+                                                <input type="radio" id="star4" name="rate7" value="<%= JSON.stringify(questions[6].concat([4]))%>" />
+                                                <label for="star4" title="text">4</label>
+                                                <input type="radio" id="star3" name="rate7" value="<%= JSON.stringify(questions[6].concat([3]))%>" />
+                                                <label for="star3" title="text">3</label>
+                                                <input type="radio" id="star2" name="rate7" value="<%= JSON.stringify(questions[6].concat([2]))%>" />
+                                                <label for="star4" title="text">2</label>
+                                                <input type="radio" id="star1" name="rate7" value="<%= JSON.stringify(questions[6].concat([1]))%>" />
+                                                <label for="star1" title="text">1</label>
+                                            </div> 
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="rate">
+                                                <input type="radio" id="star5" name="rate8" value="<%= JSON.stringify(questions[7].concat([5]))%>" />
+                                                <label for="star5" title="text">5</label>
+                                                <input type="radio" id="star4" name="rate8" value="<%= JSON.stringify(questions[7].concat([4]))%>" />
+                                                <label for="star4" title="text">4</label>
+                                                <input type="radio" id="star3" name="rate8" value="<%= JSON.stringify(questions[7].concat([3]))%>" />
+                                                <label for="star3" title="text">3</label>
+                                                <input type="radio" id="star2" name="rate8" value="<%= JSON.stringify(questions[7].concat([2]))%>" />
+                                                <label for="star4" title="text">2</label>
+                                                <input type="radio" id="star1" name="rate8" value="<%= JSON.stringify(questions[7].concat([1]))%>" />
+                                                <label for="star1" title="text">1</label>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="step-3" class="">
+                                    <div class = "row">
+                                        <div class="col-md-6"> <%= questions[8][0]%>.</div>
+                                        <div class="col-md-6"> <%= questions[9][0]%></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6"> 
+                                            <div class="rate">
+                                                <input type="radio" id="star5" name="rate9" value="<%= JSON.stringify(questions[8].concat([5]))%>" />
+                                                <label for="star5" title="text">5</label>
+                                                <input type="radio" id="star4" name="rate9" value="<%= JSON.stringify(questions[8].concat([4]))%>" />
+                                                <label for="star4" title="text">4</label>
+                                                <input type="radio" id="star3" name="rate9" value="<%= JSON.stringify(questions[8].concat([3]))%>" />
+                                                <label for="star3" title="text">3</label>
+                                                <input type="radio" id="star2" name="rate9" value="<%= JSON.stringify(questions[8].concat([2]))%>" />
+                                                <label for="star4" title="text">2</label>
+                                                <input type="radio" id="star1" name="rate9" value="<%= JSON.stringify(questions[8].concat([1]))%>" />
+                                                <label for="star1" title="text">1</label>
+                                            </div> 
+                                        </div>
+                                        <div class="col-md-6"> 
+                                            <div class="rate">
+                                                <input type="radio" id="star5" name="rate10" value="<%= JSON.stringify(questions[9].concat([1]))%>" />
+                                                <label for="star5" title="text">yes</label>
+                                                <input type="radio" id="star4" name="rate10" value="<%= JSON.stringify(questions[9].concat([0]))%>" />
+                                                <label for="star4" title="text">no</label>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                    <div class = "row">
+                                        <div class="col-md-6"> <%= questions[10][0]%></div>
+                                        <div class="col-md-6"> <%= questions[11][0]%></div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-6"> 
+                                            <div class="rate">
+                                                <input type="radio" id="star5" name="rate11" value="<%= JSON.stringify(questions[10].concat([5]))%>" />
+                                                <label for="star5" title="text">5</label>
+                                                <input type="radio" id="star4" name="rate11" value="<%= JSON.stringify(questions[10].concat([4]))%>" />
+                                                <label for="star4" title="text">4</label>
+                                                <input type="radio" id="star3" name="rate11" value="<%= JSON.stringify(questions[10].concat([3]))%>" />
+                                                <label for="star3" title="text">3</label>
+                                                <input type="radio" id="star2" name="rate11" value="<%= JSON.stringify(questions[10].concat([2]))%>" />
+                                                <label for="star4" title="text">2</label>
+                                                <input type="radio" id="star1" name="rate11" value="<%= JSON.stringify(questions[10].concat([1]))%>" />
+                                                <label for="star1" title="text">1</label>
+                                            </div>  
+                                        </div>
+                                        <div class="col-md-6"> 
+                                            <div class="rate">
+                                                <input type="radio" id="star5" name="rate12" value="<%= JSON.stringify(questions[11].concat([1]))%>" />
+                                                <label for="star5" title="text">yes</label>
+                                                <input type="radio" id="star4" name="rate12" value="<%= JSON.stringify(questions[11].concat([0]))%>" />
+                                                <label for="star4" title="text">no</label>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="step-4" class="">
+                                    <div class="row">
+                                        <div class="col-md-12"> <span>Press Submist to load your results</span> </div>
+                                        <button> Submit </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+ </body>
+ <style>
+    body {
+        background-color: #eee
+    }
+
+    .form-control:focus {
+        color: #495057;
+        background-color: #fff;
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0rem rgba(0, 123, 255, .25)
+    }
+
+    .btn-secondary:focus {
+        box-shadow: 0 0 0 0rem rgba(108, 117, 125, .5)
+    }
+
+    .close:focus {
+        box-shadow: 0 0 0 0rem rgba(108, 117, 125, .5)
+    }
+
+    .mt-200 {
+        margin-top: 200px
+    }
+
+    .btn-primary {
+        position: fixed;
+        margin: auto;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 275px;
+        height: 30px;
+    }
+</style>
+</html>

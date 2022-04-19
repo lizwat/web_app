@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tutors</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/4.9.95/css/materialdesignicons.css"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"
+        integrity="sha256-Zr3vByTlMGQhvMfgkQ5BtWRSKBGa2QlspKYJnkjZTmo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
+        integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4=" crossorigin="anonymous" />
+    <%- include('header'); -%>
+
+    <div class="container">
+
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <div class="show-results mt-5">
+                    <div class="float-left">
+                        <h5 class="text-dark mb-0 pt-2">Showing Results : 1-3 of 100</h5>
+                    </div>
+                    <div class="sort-button float-right">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item mr-3">
+                                <select class="nice-select">
+                                    <option data-display="Sort By">Default</option>
+                                    <option value="1">Name</option>
+                                    <option value="2">Rating</option>
+                                    <option value="3">Last Active</option>
+                                </select>
+                            </li>
+
+
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <form method="POST" action="/tutors">
+
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="candidates-listing-item">
+                        <% users.forEach(function (user, i) { %>
+                        <%if(i % 3 === 0) { %>
+                        <div class="list-grid-item mt-4 p-2">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="candidates-img float-left mr-4">
+                                        <img src="https://via.placeholder.com/150x150/4169E1/000000" alt="avatar"
+                                            class="img-fluid d-block rounded">
+                                    </div>
+
+                                    <div class="candidates-list-desc job-single-meta  pt-2">
+                                        <h5 class="mb-2 f-19"><a href="#" class="text-dark">Name:
+                                                <%= user.username %></a></h5>
+                                        <ul class="list-inline mb-0">
+                                            <li class="list-inline-item mr-4">
+                                                <p class="text-muted f-15 mb-0"><i class="mdi mdi-account mr-1"></i>Web
+                                                    Developer</p>
+                                            </li>
+
+                                            <li class="list-inline-item mr-4">
+                                                <p class="f-15 mb-0"><a href="" class="text-muted"><i
+                                                            class="mdi mdi-map-marker mr-1"></i>Location</a></p>
+                                            </li>
+
+                                            <li class="list-inline-item">
+                                                <p class="text-muted f-15 mb-0"><i class=""></i>Rating:
+                                                    <%= user.rateAverage%></p>
+                                            </li>
+                                        </ul>
+                                        <p class="text-muted mt-1 mb-0">Skills : HTML</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="candidates-list-fav-btn text-right">
+                                        <div class="candidates-listing-btn mt-4">
+                                            <button name="username" value="<%= user.username %>" href="#"
+                                                class="btn btn-outline btn-sm">View Profile</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-11 offset-lg-1">
+                                    <div class="candidates-item-desc">
+                                        <hr>
+                                        <p class="text-muted mb-2 f-14"> here......</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <% }%>
+
+                        <% if((i + 1) % 3 === 0) { %>
+                        <div class="list-grid-item mt-4 p-2">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="candidates-img float-left mr-4">
+                                        <img src="https://via.placeholder.com/150x150/4169E1/000000" alt=""
+                                            class="img-fluid d-block rounded">
+                                    </div>
+
+
+                                    <div class="candidates-list-desc job-single-meta  pt-2">
+                                        <h5 class="mb-2 f-19"><a href="#" class="text-dark">Name:
+                                                <%= user.username%></a></h5>
+                                        <ul class="list-inline mb-0">
+                                            <li class="list-inline-item mr-4">
+                                                <p class="text-muted f-15 mb-0"><i class="mdi mdi-account mr-1"></i>Web
+                                                    Developer</p>
+                                            </li>
+
+                                            <li class="list-inline-item mr-4">
+                                                <p class="f-15 mb-0"><a href="" class="text-muted"><i
+                                                            class="mdi mdi-map-marker mr-1"></i>Location</a></p>
+                                            </li>
+
+                                            <li class="list-inline-item">
+                                                <p class="text-muted f-15 mb-0"><i class=""></i>Rating:
+                                                    <%= user.rateAverage%></p>
+                                            </li>
+                                        </ul>
+                                        <p class="text-muted mt-1 mb-0">Skills : HTML, CSS.</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="candidates-list-fav-btn text-right">
+                                        <div class="candidates-listing-btn mt-4">
+                                            <button href="#" name="username" value="<%= user.username %>"
+                                                class="btn btn-outline btn-sm">View Profile</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-11 offset-lg-1">
+                                    <div class="candidates-item-desc">
+                                        <hr>
+                                        <p class="text-muted mb-2 f-14">Description here.....</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+
+                        <% if((i + 2) % 3 === 0) {%>
+                        <div class="list-grid-item mt-4 p-2">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="candidates-img float-left mr-4">
+                                        <img src="https://via.placeholder.com/150x150/4169E1/000000" alt=""
+                                            class="img-fluid d-block rounded">
+                                    </div>
+                                    <div class="candidates-list-desc job-single-meta  pt-2">
+                                        <h5 class="mb-2 f-19"><a href="#" class="text-dark">Name:
+                                                <%= user.username%></a></h5>
+                                        <ul class="list-inline mb-0">
+                                            <li class="list-inline-item mr-4">
+                                                <p class="text-muted f-15 mb-0"><i class="mdi mdi-account mr-1"></i>Web
+                                                    Developer</p>
+                                            </li>
+
+                                            <li class="list-inline-item mr-4">
+                                                <p class="f-15 mb-0"><a href="" class="text-muted"><i
+                                                            class="mdi mdi-map-marker mr-1"></i>Location</a></p>
+                                            </li>
+
+                                            <li class="list-inline-item">
+                                                <p class="text-muted f-15 mb-0"><i class=""></i>Rating:
+                                                    <%= user.rateAverage%></p>
+                                            </li>
+                                        </ul>
+                                        <p class="text-muted mt-1 mb-0">Skills : HTML, CSS.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="candidates-list-fav-btn text-right">
+                                        <div class="candidates-listing-btn mt-4">
+                                            <button href="#" name="username" value="<%= user.username %>"
+                                                class="btn btn-outline btn-sm">View Profile</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-11 offset-lg-1">
+                                    <div class="candidates-item-desc">
+                                        <hr>
+                                        <p class="text-muted mb-2 f-14">Description here....</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                        <% })%>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination job-pagination justify-content-center mt-5 mb-5">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                <i class="mdi mdi-chevron-double-left f-15"></i>
+                            </a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">
+                                <i class="mdi mdi-chevron-double-right f-15"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <style type="text/css">
+        body {
+            margin-top: 20px;
+            background: #edf2f4;
+        }
+
+        .candidates-listing-bg {
+            padding: 210px 0px 60px 0px;
+            background-image: url("../images/candidates-listing-bg.jpg");
+            background-size: cover;
+            position: relative;
+            background-position: center center;
+        }
+
+        .custom-checkbox .custom-control-input:checked~.custom-control-label:before {
+            background-color: #ff4f6c;
+            border-color: #ff4f6c;
+        }
+
+        .custom-checkbox .custom-control-input:focus~.custom-control-label:before {
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
+
+        .candidates-img img {
+            max-width: 90px;
+        }
+
+        .fav-icon i {
+            -webkit-text-stroke: 2px #ff4f6c;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .fav-icon i:hover {
+            -webkit-text-stroke: 0px #ff4f6c;
+            -webkit-text-fill-color: #ff4f6c;
+        }
+
+        .candidates-list-desc {
+            overflow: hidden;
+        }
+
+        .candidates-right-details {
+            position: absolute;
+            top: 0;
+            right: 20px;
+        }
+
+        .candidates-item-desc {
+            margin-left: 45px;
+        }
+
+        .list-grid-item {
+            border: 1px solid #ececec;
+            border-radius: 6px;
+            -webkit-transition: all 0.5s;
+            transition: all 0.5s;
+        }
+
+        .list-grid-item:hover {
+            -webkit-box-shadow: 0 0 20px 0px rgba(47, 47, 47, 0.09);
+            box-shadow: 0 0 20px 0px rgba(47, 47, 47, 0.09);
+            -webkit-transition: all 0.5s;
+            transition: all 0.5s;
+            border-color: transparent;
+        }
+
+        .left-sidebar .card-body {
+            border-bottom: 1px solid #ececec;
+        }
+
+        .custom-control {
+            margin: 11px 20px;
+        }
+
+        .card-header {
+            background-color: transparent;
+            margin-bottom: 0 !important;
+        }
+
+        .pagination.job-pagination .page-link {
+            border-radius: 50% !important;
+            margin: 0 4px;
+            height: 46px;
+            width: 45px;
+            line-height: 29px;
+            text-align: center;
+            color: #777777;
+        }
+
+        .page-item.active .page-link {
+            background-color: #ff4f6c;
+            border-color: #ff4f6c;
+            color: #ffffff !important;
+        }
+
+        .f-14 {
+            font-size: 14px;
+        }
+
+        .btn-outline {
+            color: #ff4f6c;
+            border-color: #ff4f6c;
+        }
+
+        .btn-sm {
+            padding: 8px 22px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        (function ($) {
+            $('.nice-select').niceSelect();
+        })(jQuery)
+    </script>
+</body>
+
+</html>
+
+<!-- previous tutors page
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Star rating</title>
+</head>
+
+<body>
+    <form action="/tutors" method="POST">
+        <label for="name">Enter the username of the tutor you would like to rate: </label>
+        <input type="text" id="name" name="name" />
+
+        <div class="rate">
+            <input type="radio" id="star5" name="rate" value="5" />
+            <label for="star5" title="text">5 stars</label>
+            <input type="radio" id="star4" name="rate" value="4" />
+            <label for="star4" title="text">4 stars</label>
+            <input type="radio" id="star3" name="rate" value="3" />
+            <label for="star3" title="text">3 stars</label>
+            <input type="radio" id="star2" name="rate" value="2" />
+            <label for="star2" title="text">2 stars</label>
+            <input type="radio" id="star1" name="rate" value="1" />
+            <label for="star1" title="text">1 star</label>
+        </div>
+        <button>Submit</button>
+
+
+</body>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .rate {
+        float: left;
+        height: 46px;
+        padding: 0 10px;
+    }
+
+    .rate:not(:checked)>input {
+        position: absolute;
+        top: -9999px;
+    }
+
+    .rate:not(:checked)>label {
+        float: right;
+        width: 1em;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 30px;
+        color: #ccc;
+    }
+
+    .rate:not(:checked)>label:before {
+        content: '★ ';
+    }
+
+    .rate>input:checked~label {
+        color: #ffc700;
+    }
+
+    .rate:not(:checked)>label:hover,
+    .rate:not(:checked)>label:hover~label {
+        color: #deb217;
+    }
+
+    .rate>input:checked+label:hover,
+    .rate>input:checked+label:hover~label,
+    .rate>input:checked~label:hover,
+    .rate>input:checked~label:hover~label,
+    .rate>label:hover~input:checked~label {
+        color: #c59b08;
+    }
+</style> 
+
+</html> -->

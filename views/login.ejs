@@ -1,16 +1,64 @@
+<!doctype html>
+<html>
 
-<h1>login</h1>
+<head>
+    <title>Login Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css2?family=Neuton:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body {
+            padding-top: 100px;        
+            font-family: 'Patrick Hand';
+            color: black;
+            background-image: url(https://centralaz.edu/wp-content/uploads/2019/10/Book-on-Computer.jpg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
 
-<form action="/login" method="POST">
-    <input type="text" name="username"
-        placeholder="username">
-    <input type="password" name="password"
-        placeholder="password">
-    <button>login</button>
-</form>
+        .jumbotron{
+         background-color: antiquewhite;
+        }
+        
+        h1{
+        font-family: 'Neuton', serif;
+        }
+    </style>
+</head>
 
-<h1>This is home page</h1>
+<body>
+    <div class="container">
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class="jumbotron text-center">
+            <h1><span class="fa fa-sign-in"></span> Login</h1>
 
-<li><a href="/register">Sign up!!</a></li>
-<li><a href="/login">Login</a></li>
-<li><a href="/logout">Logout</a></li>
+            <!-- login -->
+            <form action="/login" method="POST">
+
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" placeholder="Enter Username" class="form-control" id="xyz" name="username">
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" class="form-control" name="password"
+                        placeholder="Enter Password">
+                </div>
+
+                <button type="submit" class="btn btn-info btn-lg">Login</button>
+            </form>
+
+            <hr>
+            <p>Need an account? <a href="/register">Signup</a></p>
+            <p>Or go <a href="/">home</a>.</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

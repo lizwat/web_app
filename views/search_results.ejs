@@ -1,0 +1,53 @@
+<h1>Search Results: </h1>
+
+<%results.forEach(function (user) {%>
+<form method="POST" action="\search_results">
+    <ul class = "list">
+        <li class="item">
+            <img class= "profile_img" src="https://via.placeholder.com/150x150/4169E1/000000" alt="avatar">
+            <span class = "name">Name: <%= user.username%></span>
+            <button class="button_profile" href="#" name="username" value="<%=user.username%>">View Profile</button>
+        </li>
+    </ul>
+</form>
+
+<% }) %>
+
+<style type="text/css">
+    .list{
+        list-style-type: none;
+        padding: 12px;
+        margin: 0;
+    }
+
+    .button_profile{
+        vertical-align: bottom;
+        
+    }
+
+
+    .item:hover{
+        -webkit-box-shadow: 0 0 20px 0px rgba(47, 47, 47, 0.09);
+        box-shadow: 0 0 20px 0px rgba(47, 47, 47, 0.09);
+        background-color: white;
+    }
+
+    .item{
+        background-color: lightgrey;
+        border: 1px solid black;
+        padding: 12px;
+        font-size: 14px;
+        display: block;
+        color: black;
+    }
+
+    .profile_img{
+        width: 90px;
+    }
+
+    .name{
+        vertical-align:top;
+        margin-left: 10px;
+    }
+
+</style>
