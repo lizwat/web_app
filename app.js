@@ -96,49 +96,23 @@ app.get('/userprofile', function(req, res, next) {
     res.render("userprofile");
 });
 
-
 // Handle updating user profile data
 // --------------------------------------------------
-app.post('/userprofile', (req, res, next) => {
+app.post('/userprofile', async (req, res, next) => {
     if (!req.isAuthenticated()) {
       res.redirect('/login');
     }
-    const users = req.app.locals.users;
-    
+    const users = req.app.locals.users; 
     const { username, fName, lName,
-        email, phone } = req.body;
+         email, phone } = req.body;
+
+        await User.updateOne({username: req.body.username}, { $set: { username, fName, lName,
+        email, phone }});
     
-    const payload = {
-        username: req.body.username,
-        fName: req.body.fName,
-        lName: req.body.lName,
-        email: req.body.email,
-        phone: req.body.phone,
-        grade: req.body.grade,
-        phone: req.body.phone,
-        email: req.body.email,
-    };
-    var user = User.findOne({username: req.body.username});
-    
-    User.updateOne(user, {payload}, function(err, res){
-        if(err){
-          throw err;
-        }
-        else {
-          console.log("user updated");
-          render("dashboard");
-        }
-      });
-    //const _id = ObjectID(req.user);
-  
-    /*users.updateOne({ _id }, { $set: { username, fName, lName, phone, email } }, (err) => {
-      if (err) {
-        throw err;
-      }
-      
-      res.redirect('/dashboard');
-    });*/
+    res.render("userprofile");
   });
+
+
 
 //Auth Routes
 app.get("/login", (req, res) => {
