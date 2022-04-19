@@ -1,21 +1,29 @@
 {
-  "name": "web_app",
+  "name": "auth",
   "version": "1.0.0",
-  "description": "web application",
+  "description": "user logging in",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint:ejs": "ejslint src/templates/some-template.ejs"
   },
-  "author": "Elizabeth Waters",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.1",
+    "alert": "^5.0.10",
+    "body-parser": "^1.20.0",
+    "connect-flash": "^0.1.1",
+    "cookie": "^0.4.2",
+    "cookie-parser": "^1.4.6",
     "ejs": "^3.1.6",
-    "express": "^4.17.2",
+    "express": "^4.17.3",
     "express-session": "^1.17.2",
-    "mongoose": "^6.2.1",
-    "passport": "^0.5.2",
+    "mongoose": "^5.13.14",
+    "nodemon": "^2.0.15",
+    "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^6.1.0"
+    "passport-local-mongoose": "^6.0.1",
+    "save": "^2.4.0",
+    "stripe": "^8.215.0"
   }
 }

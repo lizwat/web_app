@@ -1,0 +1,9 @@
+<% users.forEach(function (user) { %>
+    <li>
+        <h1>Rate: <%= user.username %> </h1>
+    </li>
+    <form action="/tutors" method="POST" >
+        <button>Submit</button>
+    </form>
+<% }) %>
+

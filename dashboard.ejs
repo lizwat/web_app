@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+  <script type="text/javascript">
+    function showForm() {
+      document.getElementById('form').style.display = 'block';
+    }
+  </script>
+
+
+
+</head>
+<%- include('header') -%>
+
+  <style>
+    .card {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: lightblue;
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+
+  <!-- TABLE HEADER -->
+
+  <body>
+
+    <h1><b>Posts</b></h1>
+
+    <%postList.reverse().forEach(post=> {%>
+      <div class="card border-primary mb-3" style="max-width: 90rem; margin: top 10px;">
+        <div class="card-header text-primary">
+          <b>
+            <%= post.class %> — <%= post.topic %>
+          </b>
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            <%= post.description %>
+          </p>
+
+          <!--REPLY FORMATTING-->
+          <ul>
+            <% for(var i=0; i< post.replies.length; i++) { %>
+              <li>
+                <%= post.replies[i] %>
+              </li>
+              <% } %>
+          </ul>
+
+
+          <footer class="blockquote-footer">user: <%= post.usertext %>
+          </footer>
+          <button onclick="showForm()" name="comment" value="<%= post.description %>" href="#"
+            class="btn btn-outline btn-sm">Comment</button>
+
+          <%# fix the way other replies look %>
+            <%# make the comment form below show only if reply is clicked, otherwise its not visible %>
+
+
+              <form action="/replypost" method="POST" id="">
+                <div class="reply-block">
+
+                  <label for="reply"> Reply</label>
+
+                  <textarea rows="5" input type="text" class="form-control" name="reply"></textarea>
+                  <button class="reply-submit" name = "descriptionid" value= <%= post.uniqueid %> >send</button>
+                  <button class="reply-cancel">cancel</button>
+
+                  <%# make the cancel button close the reply form %>
+                </div>
+              </form>
+
+        </div>
+      </div>
+
+      <%})%>
+
+
+  </body>
+
+
+
+</html>
+
+
+
+<%- include('footer') -%>
