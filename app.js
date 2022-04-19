@@ -96,23 +96,6 @@ app.get('/userprofile', function(req, res, next) {
     res.render("userprofile");
 });
 
-// Handle updating user profile data
-// --------------------------------------------------
-app.post('/userprofile', async (req, res, next) => {
-    if (!req.isAuthenticated()) {
-      res.redirect('/login');
-    }
-    const users = req.app.locals.users; 
-    const { username, fName, lName,
-         email, phone } = req.body;
-
-        await User.updateOne({username: req.body.username}, { $set: { username, fName, lName,
-        email, phone }});
-    
-    res.render("userprofile");
-  });
-
-
 
 //Auth Routes
 app.get("/login", (req, res) => {
@@ -214,9 +197,6 @@ app.get("/register", (req, res) => {
     res.render("register");
 });
 
-app.get("/changepassword", (req, res) => {
-    res.render("changepassword");
-});
 
 app.post("/register", (req, res) => {
 if (req.body.tutor == "on"){ //check status of tutor textbox
