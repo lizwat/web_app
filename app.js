@@ -1,6 +1,9 @@
 const { vary } = require('express/lib/response');
 const { on } = require('./models/user');
 const ObjectID = require('mongodb').ObjectID;
+var auth = require('passport-local-authenticate');
+const crypto = require('crypto');
+
 
 const express = require('express'),
     app = express(),
@@ -24,6 +27,8 @@ const Strategy = require('passport-local').Strategy;
 const session = require('express-session');
 const flash = require('connect-flash');
 //Connecting to Mongo Client 
+
+
 MongoClient.connect('mongodb+srv://steve:chocolate3@cluster0.g7hvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
 (err, client) => {
     if (err) {
@@ -102,8 +107,10 @@ app.get('/userprofile', function(req, res, next) {
     if (!req.isAuthenticated()) { 
       res.redirect('/login');
     }
-    console.log("i hit this");
-    res.render("userprofile");
+    else{
+        console.log("i hit this");
+        res.render("userprofile");
+    }
 });
 
 // Handle updating user profile data
@@ -132,47 +139,40 @@ app.post('/userprofile', async (req, res, next) => {
 app.get("/changepassword", (req, res) => {
 if (!req.isAuthenticated()) { 
     res.redirect('/login');
-}
+}else{
+    console.log("i am here")
     res.render("changepassword");
+}
 });
 
 // Handle password change request
 // --------------------------------------------------
-app.post('/changepassword', async (req, res, next) => {
-if (!req.isAuthenticated()) {
-    console.log("i am not authenticated")
-    res.redirect('/login');
-}
+app.post("/changepassword", async (req, res, next) => {
 
-const { current_password, new_password, 
-    retyped_new_password } = req.body
-    
-    var user = await User.findOne({username: input});
+    if (!req.isAuthenticated()) {
+        console.log("i am not authenticated")
+        res.redirect('/login');
+    }
 
-    console.log(user.username);
-      
-      User.updateOne(user, {rateCount: 1, rateAverage: rateVal}, function(err, res){
-        if(err){
-          throw err;
-        }
-        else {
-          console.log("1 document updated");
-          console.log(user.rateCount);
-        }
-      });
-//check if current_password is correct
-    //idk how to implement yet 
+    else{
 
-//if current_password is correct, check that the new and retyped password match
-if (retyped_new_password !== new_password){
-    console.log('new password and retyped new password are not the same');
-    res.redirect('/changepassword');
-    //req.flash('error', 'new password and retyped new password are not the same');
-} else {
-    await User.updateOne({hash: req.body.new_password}, { $set: { hash }});
-}
+    current_password = req.body.curr_password;
+    new_password = req.body.new_password;
+    retyped_new_password = req.body.retyped_new_password;
 
-});
+    //check if the new password and retyped password are the same 
+    if (new_password != retyped_new_password){
+        console.log("the new password and retyped password do not match");
+        throw err
+    } 
+    else{
+        const _id = ObjectID(req.session.passport.user);
+        
+        user = await User.findById(_id);
+        user.changePassword(req.body.curr_password, req.body.new_password);
+        res.redirect('/login');
+    }   
+}});
   
 
 //Auth Routes
