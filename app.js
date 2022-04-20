@@ -55,12 +55,21 @@ db.on("error", (err) => {
 })
 const postCollection = db.collection('posts')
 
+/*
 passport.serializeUser(function(user, done) {
     done(null, user.username);
  }); //session encoding
 passport.deserializeUser(function(obj, done) {
     done(null, obj)
 }); //session decoding
+*/
+
+passport.serializeUser((user, done) => {
+    done(null, user._id);
+  });
+passport.deserializeUser((id, done) => {
+    done(null, { id });
+  });
 passport.use(new LocalStrategy(User.authenticate()));
 
 app.set("view engine", "ejs");
@@ -87,7 +96,8 @@ app.get("/", (req, res) => {
     res.render("userprofile");
 })*/
 
-//userprofileroutes
+// Rendering user profile view
+// --------------------------------------------------
 app.get('/userprofile', function(req, res, next) {
     if (!req.isAuthenticated()) { 
       res.redirect('/login');
@@ -96,6 +106,74 @@ app.get('/userprofile', function(req, res, next) {
     res.render("userprofile");
 });
 
+// Handle updating user profile data
+// --------------------------------------------------
+app.post('/userprofile', async (req, res, next) => {
+    if (!req.isAuthenticated()) {
+      res.redirect('/login');
+    }
+
+    const users = req.app.locals.users;
+    const _id = ObjectID(req.session.passport.user);
+  
+    const { username, fName, lName,
+        email, phone } = req.body;
+
+    users.updateOne({ _id }, { $set: { username, fName, lName, phone, email } }, (err) => {
+      if (err) {
+        throw err;
+      }
+      res.redirect('/userprofile');
+    });
+  });
+
+// Rendering change password view 
+// --------------------------------------------------
+app.get("/changepassword", (req, res) => {
+if (!req.isAuthenticated()) { 
+    res.redirect('/login');
+}
+    res.render("changepassword");
+});
+
+// Handle password change request
+// --------------------------------------------------
+app.post('/changepassword', async (req, res, next) => {
+if (!req.isAuthenticated()) {
+    console.log("i am not authenticated")
+    res.redirect('/login');
+}
+
+const { current_password, new_password, 
+    retyped_new_password } = req.body
+    
+    var user = await User.findOne({username: input});
+
+    console.log(user.username);
+      
+      User.updateOne(user, {rateCount: 1, rateAverage: rateVal}, function(err, res){
+        if(err){
+          throw err;
+        }
+        else {
+          console.log("1 document updated");
+          console.log(user.rateCount);
+        }
+      });
+//check if current_password is correct
+    //idk how to implement yet 
+
+//if current_password is correct, check that the new and retyped password match
+if (retyped_new_password !== new_password){
+    console.log('new password and retyped new password are not the same');
+    res.redirect('/changepassword');
+    //req.flash('error', 'new password and retyped new password are not the same');
+} else {
+    await User.updateOne({hash: req.body.new_password}, { $set: { hash }});
+}
+
+});
+  
 
 //Auth Routes
 app.get("/login", (req, res) => {
