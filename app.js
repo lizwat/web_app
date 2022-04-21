@@ -57,6 +57,7 @@ db.on("error", (err) => {
   db.on('connected', (err, res) => {
     console.log('Connected to database')
 })
+
 const postCollection = db.collection('posts')
 
 /*
@@ -74,12 +75,14 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
     done(null, { id });
   });
+
 passport.use(new LocalStrategy(User.authenticate()));
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({
     extended: true
 }))
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -94,23 +97,21 @@ app.use((req, res, next) => {
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/users');
 const tutorsRouter = require('./routes/tutors');
-
+const searchRouter = require('./routes/search');
 
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/tutors', tutorsRouter);
+app.use('/search', searchRouter);
 
 app.get("/", (req, res) => {
     res.render("home");
 })
 
-
-
 app.get("/createpost", (req, res) => {
     var usertext = req.cookies.currentUser;
     res.render("createpost");
 });
-
 
 app.get("/matches", async (req, res)=>{
     var user = req.cookies.currentUser;
@@ -184,51 +185,6 @@ app.post("/login", passport.authenticate("local"),  setUserIDResponseCookie, fun
     next();
 });
 
-app.get("/register", (req, res) => {
-    res.render("register");
-});
-
-
-app.post("/register", (req, res) => {
-if (req.body.tutor == "on"){ //check status of tutor textbox
-    tutor = true;
-}else{
-    tutor = false;
-}
-if (!ValidateEmail(req.body.email)){
-    return res.send("<script> alert('Please Enter A Valid Email'); window.location =  '/register'; </script>")
-}
-res.cookie("currentUser", req.body.username, {
-    // expire in year 9999 (from: https://stackoverflow.com/a/28289961)
-    expires: new Date(253402300000000),
-    httpOnly: false, // allows JS code to access it
-});
-    User.register(new User({
-        fName: req.body.fName.toLowerCase(),
-        lName: req.body.lName.toLowerCase(),
-        username: req.body.username.toLowerCase(),
-        phone: req.body.phone,
-        telephone: req.body.telephone,
-        grade: req.body.grade,
-        phone: req.body.phone,
-        email: req.body.email,
-        tutor: tutor,
-    }), req.body.password, function (err, user) {
-        if (err) {
-            console.log(err);
-            res.render("register");
-        }else if(tutor){
-            console.log("to courses")
-            res.redirect("courses");
-        }else{
-            passport.authenticate("local")(req, res, function () {
-            res.redirect("/login");
-            })
-        }
-    })
-})
-
-
 app.post("/replypost", async (req, res) => {
     var x = req.body.reply;
     var y = req.body.descriptionid;
@@ -282,76 +238,6 @@ app.get('/posthistory', (req, res) => {
       .catch(error => console.error(error))
 })
 
-app.get("/tutors", async (req, res)=>{
-   var users =  await User.find({});
-   res.render("tutors", {"users": users});
-})
-
-
-app.post("/tutors", async (req, res)=> {
-    let tutor =  req.body.username;
-    var user = await User.find({username: tutor})
-    res.render("rate_tutors", {"users": user});
-}) 
-
-
-//tutor rating
-
-app.get("/rate_tutors", (req,res)=>{
-    res.render("rate_tutors", {"users": user});
-});
-
-
-app.post("/rate_tutors", async (req, res)=> {
-    const input = req.body.username;
-    console.log(req.body.username);
-    const rates = req.body;
-    var rateVal = parseFloat(rates.rate);
-
-
-    var user = await User.findOne({username: input});
-
-    console.log(user.username);
-
-    if(!user.rateCount || isNaN(user.rateAverage)){
-    
-    User.updateOne(user, {rateCount: 1, rateAverage: rateVal}, function(err, res){
-        if(err){
-        throw err;
-        }
-        else {
-        console.log("1 document updated");
-        console.log(user.rateCount);
-        }
-    });
-
-    }
-    else {
-    var rateCount  = parseFloat(user.rateCount);
-    var rateAvg = parseFloat(user.rateAverage);
-    console.log(rateCount);
-    console.log(rateAvg);
-
-    var updatedRateAvg = ((rateCount*rateAvg) + rateVal)/(rateCount + 1);
-    var updateRateCount = rateCount +  1;
-
-    console.log(updatedRateAvg);
-    console.log(updateRateCount);
-
-
-    User.updateOne({username: input}, {rateCount: updateRateCount, rateAverage:updatedRateAvg}, function(err, res){
-        if(err){
-        throw err;
-        }
-        else {
-        console.log("1 document updated");
-        }
-    });
-    }
-
-    res.send(user);
-});
-//end tutor rating
 
 //Search
 //TODO: filter queries to only retrieve tutors for a specific class during search

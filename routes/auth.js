@@ -97,9 +97,7 @@ router.post("/register", (req, res) => {
                 console.log("to courses")
                 res.render("courses");
             }else{
-                passport.authenticate("local")(req, res, function () {
                 res.redirect("/auth/login");
-                })
             }
         })
     })
