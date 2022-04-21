@@ -390,7 +390,7 @@ app.post("/search", async (req,res)=>{
 
 //Questionnaire for matchmaker
 
-app.get("/matchmaker", (req,res)=>{
+app.get("/matchmaker", async (req,res)=>{
     var questions = [
         ["I prefer to work with visual representations of a concept", "bmatch"],
         ["I have tutored/been tutored before","bmatch"],
@@ -406,8 +406,28 @@ app.get("/matchmaker", (req,res)=>{
         ["I work well in high-pressure situations", "bmatch"]
     ]
 
-    res.render("matchmaker.ejs", {questions: questions});
+    var user = req.cookies.currentUser;
+    //var userfind = await User.find({username: user});
+    console.log(user);
+
+    var filter = await User.find({username: user,  questionnaire:{ $exists: true, $not: {$size: 0}}});
+    console.log(filter);
+    console.log(filter.length)
+    console.log(filter.length == 0);
+    console.log(filter.questionnaire);
+    if(!filter.length == 0){
+        var resUsers = Promise.resolve(findMatches(user));
+        resUsers.then(function(list){
+
+            res.render("matches", {"users": list});
+        });
+
+    }
+    else { 
+        res.render("matchmaker.ejs", {questions: questions});
+    }
 }) 
+
 /** 
 app.post("/questionnaire",(req,res) => {
     res.render("matchmaker",);
