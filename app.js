@@ -99,12 +99,15 @@ const userRouter = require('./routes/users');
 const tutorsRouter = require('./routes/tutors');
 const searchRouter = require('./routes/search');
 const matchesRouter = require('./routes/matches');
+const matchmakerRouter = require('./routes/matchmaker');
+
 
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/tutors', tutorsRouter);
 app.use('/search', searchRouter);
 app.use('/matches', matchesRouter);
+app.use('/matchmaker', matchmakerRouter);
 
 
 app.get("/", (req, res) => {
@@ -116,21 +119,6 @@ app.get("/createpost", (req, res) => {
     res.render("createpost");
 });
 
-app.get("/matches", async (req, res)=>{
-    var user = req.cookies.currentUser;
-    var resUsers = Promise.resolve(findMatches(user));
-    resUsers.then(function(list){
-       
-        res.render("matches", {"users": list});
-    })
-    
-})
-
-app.post("/matches", async (req, res)=>{
-    let username = req.body.username;
-    var user = await User.find({username: username});
-    res.render("rate_tutors", {"users": user});
-})
 /** 
 app.get("/matchmaker", (req, res)=> {
     res.render("matchmaker");
@@ -177,15 +165,6 @@ app.get("/dashboard", (req, res) => {
     })
 });
 
-app.post("/login", passport.authenticate("local"),  setUserIDResponseCookie, function (req, res, next) { //saves username as cookie
-    if (req.user) {
-        res.redirect("/dashboard");
-    } else {
-        res.redirect("/login");
-    }
-    next();
-});
-
 app.post("/replypost", async (req, res) => {
     var x = req.body.reply;
     var y = req.body.descriptionid;
@@ -201,11 +180,6 @@ app.post("/replypost", async (req, res) => {
     .catch(error => console.error(error))
 });
 
-/*function find (name, query, cb) {
-    mongoose.connection.db.collection(name, function (err, collection) {
-       collection.find(query).toArray(cb);
-   });
-}*/
 
 function numbergenerator(){
     xo = Math.floor(Math.random()*100);
@@ -237,58 +211,6 @@ app.get('/posthistory', (req, res) => {
         res.render('posthistory', { posts: results})
       })
       .catch(error => console.error(error))
-})
-
-//Questionnaire for matchmaker
-
-app.get("/matchmaker", async (req,res)=>{
-    var questions = [
-        ["I prefer to work with visual representations of a concept", "bmatch"],
-        ["I have tutored/been tutored before","bmatch"],
-        ["I prefer putting concepts into words versus mathematical/logical symbols", "rmatch"],
-        ["I have a very structured routine / I prefer to go with the flow", "rmatch"],
-        ["I prefer give/receive positive reinforcement / I prefer to give/receive constructive criticism", "rmatch"],
-        ["I am more objective oriented / I am more process oriented", "rmatch"],
-        ["I prefer working with someone older than me / IDC/ I prefer working with someone younger than me", "ropp"],
-        ["I prefer to focus on the task / I prefer to get to know my tutor", "rmatch"],
-        ["I tend to keep my stuff extremely organized (vs.whatever order makes sense to me)", "rmatch"],
-        ["I prefer to work in a few long sessions versus many frequent short sessions", "bmatch"],
-        ["I prefer to be in control of the learning process / I prefer to be guided in the learning process", "ropp"],
-        ["I work well in high-pressure situations", "bmatch"]
-    ]
-
-    var user = req.cookies.currentUser;
-    //var userfind = await User.find({username: user});
-    console.log(user);
-
-    var filter = await User.find({username: user,  questionnaire:{ $exists: true, $not: {$size: 0}}});
-    console.log(filter);
-    console.log(filter.length)
-    console.log(filter.length == 0);
-    console.log(filter.questionnaire);
-    if(!filter.length == 0){
-        var resUsers = Promise.resolve(findMatches(user));
-        resUsers.then(function(list){
-           
-            res.render("matches", {"users": list});
-        });
-        
-    }
-    else { 
-        res.render("matchmaker.ejs", {questions: questions});
-    }
-}) 
-
-app.post("/matchmaker", async (req, res)=>{
-    processResponses(req);
-    var users = findMatches(req.cookies.currentUser);
-    var resUsers = Promise.resolve(users)
-    resUsers.then(function(list){
-        console.log(list[0].username);
-        res.render("matches", {"users": list});
-    });
-    
-    
 })
 
 /** 
