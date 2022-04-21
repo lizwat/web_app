@@ -11,6 +11,7 @@ const UserSchema = new mongoose.Schema({
     fName:String,
     lName:String,
     questionnaire:Array,
+    hash: String,
     rateCount: 0,
     rateAverage: 0
 }) ;

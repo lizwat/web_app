@@ -1,11 +1,13 @@
 const { vary } = require('express/lib/response');
 const { on } = require('./models/user');
+const ObjectID = require('mongodb').ObjectID;
+var auth = require('passport-local-authenticate');
+const crypto = require('crypto');
 
 
 const express = require('express'),
     app = express(),
     mongoose = require("mongoose"),
-    passport = require("passport"),
     bodyParser = require("body-parser"),
     LocalStrategy = require("passport-local"),
     passportLocalMongoose = require("passport-local-mongoose"),
@@ -16,7 +18,28 @@ const express = require('express'),
 const { compileQueryParser } = require('express/lib/utils');
 
 
-    const stripe = require('stripe')('sk_test_51KgxQBLaWiOxnQqJKlygNvObyWrY9R1NFrL7wkURDdSyVPqvMuL7nuojgjmYGjPwMoXEZJlOiWbGLswfju0rsCka00weMZrDen'); // the secret key from dashboard
+const stripe = require('stripe')('sk_test_51KgxQBLaWiOxnQqJKlygNvObyWrY9R1NFrL7wkURDdSyVPqvMuL7nuojgjmYGjPwMoXEZJlOiWbGLswfju0rsCka00weMZrDen'); // the secret key from dashboard
+
+//Adding some modules
+const MongoClient = require('mongodb').MongoClient;
+const passport = require('passport');
+const Strategy = require('passport-local').Strategy;
+const session = require('express-session');
+const flash = require('connect-flash');
+//Connecting to Mongo Client 
+
+
+MongoClient.connect('mongodb+srv://steve:chocolate3@cluster0.g7hvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+(err, client) => {
+    if (err) {
+    throw err;
+    }
+    const db = client.db('myFirstDatabase');
+    const users = db.collection('users');
+    app.locals.users = users;
+    console.log("connected to database");
+});
+
 //Connecting database
 mongoose.connect("mongodb+srv://steve:chocolate3@cluster0.g7hvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
 app.use(require("express-session")({
@@ -37,12 +60,21 @@ db.on("error", (err) => {
 })
 const postCollection = db.collection('posts')
 
+/*
 passport.serializeUser(function(user, done) {
     done(null, user.username);
  }); //session encoding
 passport.deserializeUser(function(obj, done) {
     done(null, obj)
 }); //session decoding
+*/
+
+passport.serializeUser((user, done) => {
+    done(null, user._id);
+  });
+passport.deserializeUser((id, done) => {
+    done(null, { id });
+  });
 passport.use(new LocalStrategy(User.authenticate()));
 
 app.set("view engine", "ejs");
@@ -51,15 +83,98 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use((req, res, next) => {
+    res.locals.loggedIn = req.isAuthenticated();
+    next();
+});
+
 //=======================
 //      R O U T E S
 //=======================
+
+
 app.get("/", (req, res) => {
     res.render("home");
 })
-app.get("/userprofile", isLoggedIn, (req, res) => {
+/*app.get("/userprofile", isLoggedIn, (req, res) => {
     res.render("userprofile");
-})
+})*/
+
+// Rendering user profile view
+// --------------------------------------------------
+app.get('/userprofile', function(req, res, next) {
+    if (!req.isAuthenticated()) { 
+      res.redirect('/login');
+    }
+    else{
+        console.log("i hit this");
+        res.render("userprofile");
+    }
+});
+
+// Handle updating user profile data
+// --------------------------------------------------
+app.post('/userprofile', async (req, res, next) => {
+    if (!req.isAuthenticated()) {
+      res.redirect('/login');
+    }
+
+    const users = req.app.locals.users;
+    const _id = ObjectID(req.session.passport.user);
+  
+    const { username, fName, lName,
+        email, phone } = req.body;
+
+    users.updateOne({ _id }, { $set: { username, fName, lName, phone, email } }, (err) => {
+      if (err) {
+        throw err;
+      }
+      res.redirect('/userprofile');
+    });
+  });
+
+// Rendering change password view 
+// --------------------------------------------------
+app.get("/changepassword", (req, res) => {
+if (!req.isAuthenticated()) { 
+    res.redirect('/login');
+}else{
+    console.log("i am here")
+    res.render("changepassword");
+}
+});
+
+// Handle password change request
+// --------------------------------------------------
+app.post("/changepassword", async (req, res, next) => {
+
+    if (!req.isAuthenticated()) {
+        console.log("i am not authenticated")
+        res.redirect('/login');
+    }
+
+    else{
+
+    current_password = req.body.curr_password;
+    new_password = req.body.new_password;
+    retyped_new_password = req.body.retyped_new_password;
+
+    //check if the new password and retyped password are the same 
+    if (new_password != retyped_new_password){
+        console.log("the new password and retyped password do not match");
+        throw err
+    } 
+    else{
+        const _id = ObjectID(req.session.passport.user);
+        
+        user = await User.findById(_id);
+        user.changePassword(req.body.curr_password, req.body.new_password);
+        res.redirect('/login');
+    }   
+}});
+  
+
 //Auth Routes
 app.get("/login", (req, res) => {
     res.render("login");
@@ -72,31 +187,26 @@ app.get("/createpost", (req, res) => {
 
 
 app.get("/matches", async (req, res)=>{
-    var users =  await User.find({});
-    res.render("matches", {"users": users});
+    var user = req.cookies.currentUser;
+    var resUsers = Promise.resolve(findMatches(user));
+    resUsers.then(function(list){
+       
+        res.render("matches", {"users": list});
+    })
+    
 })
 
 app.post("/matches", async (req, res)=>{
     let username = req.body.username;
-    var user = await User.findOne({username: username});
-    //res.render("/payment", {"user": user});
+    var user = await User.find({username: username});
+    res.render("rate_tutors", {"users": user});
 })
 /** 
 app.get("/matchmaker", (req, res)=> {
     res.render("matchmaker");
 }) */
 
-app.post("/matchmaker", async (req, res)=>{
-    processResponses(req);
-    var users = findMatches(req.cookies.currentUser);
-    var resUsers = Promise.resolve(users)
-    resUsers.then(function(list){
-        console.log(list[0].username);
-        res.render("matches", {"users": list});
-    });
-    
-    
-})
+
 
 /*app.get("/payment", (req, res)=>{
     res.render("payment", {"user": user});
@@ -160,9 +270,6 @@ app.get("/register", (req, res) => {
     res.render("register");
 });
 
-app.get("/changepassword", (req, res) => {
-    res.render("changepassword");
-});
 
 app.post("/register", (req, res) => {
 if (req.body.tutor == "on"){ //check status of tutor textbox
@@ -266,13 +373,13 @@ app.get("/tutors", async (req, res)=>{
 app.post("/tutors", async (req, res)=> {
     let tutor =  req.body.username;
     var user = await User.find({username: tutor})
-    res.send("rate_tutors", {"users": user});
+    res.render("rate_tutors", {"users": user});
 }) 
 
 
 //tutor rating
 
-    app.get("/rate_tutors",(req,res)=>{
+    app.get("/rate_tutors", (req,res)=>{
       res.render("rate_tutors", {"users": user});
     });
 
@@ -356,7 +463,7 @@ app.post("/search", async (req,res)=>{
 
 //Questionnaire for matchmaker
 
-app.get("/matchmaker", (req,res)=>{
+app.get("/matchmaker", async (req,res)=>{
     var questions = [
         ["I prefer to work with visual representations of a concept", "bmatch"],
         ["I have tutored/been tutored before","bmatch"],
@@ -372,8 +479,39 @@ app.get("/matchmaker", (req,res)=>{
         ["I work well in high-pressure situations", "bmatch"]
     ]
 
-    res.render("matchmaker.ejs", {questions: questions});
+    var user = req.cookies.currentUser;
+    //var userfind = await User.find({username: user});
+    console.log(user);
+
+    var filter = await User.find({username: user,  questionnaire:{ $exists: true, $not: {$size: 0}}});
+    console.log(filter);
+    console.log(filter.length)
+    console.log(filter.length == 0);
+    console.log(filter.questionnaire);
+    if(!filter.length == 0){
+        var resUsers = Promise.resolve(findMatches(user));
+        resUsers.then(function(list){
+           
+            res.render("matches", {"users": list});
+        });
+        
+    }
+    else { 
+        res.render("matchmaker.ejs", {questions: questions});
+    }
 }) 
+
+app.post("/matchmaker", async (req, res)=>{
+    processResponses(req);
+    var users = findMatches(req.cookies.currentUser);
+    var resUsers = Promise.resolve(users)
+    resUsers.then(function(list){
+        console.log(list[0].username);
+        res.render("matches", {"users": list});
+    });
+    
+    
+})
 /** 
 app.post("/questionnaire",(req,res) => {
     res.render("matchmaker",);

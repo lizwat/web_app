@@ -13,7 +13,7 @@
 <body>
     <%- include('header'); -%>
 
-    <% users.forEach(function (user) { %>
+ <% users.forEach(function (user) { %>
 
     <form action="/rate_tutors" method="POST">
         <!--<input type="" name="username" value=<%= user.username %>>Rating:</a>
@@ -50,7 +50,7 @@
                                 <label for="star1" title="text">1 star</label>
                             </div>
                             <button name="username" value=<%= user.username %>> Submit</button>
-                            <% }) %>
+                
                         </div>
                     </div>
 
@@ -108,6 +108,7 @@
 
                                 <a href="/paymentportal"  class="btn btn-outline-primary"name="username"  >Give a tip</a>
                             </div>
+                            <% }) %>
 
                         </div>
                     </div>
