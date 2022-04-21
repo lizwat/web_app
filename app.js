@@ -301,7 +301,7 @@ res.cookie("currentUser", req.body.username, {
             res.render("register");
         }else if(tutor){
             console.log("to courses")
-            res.render("courses");
+            res.redirect("courses");
         }else{
             passport.authenticate("local")(req, res, function () {
             res.redirect("/login");
