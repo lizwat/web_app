@@ -19,24 +19,19 @@
             <div class="col-lg-8 mx-auto text-center">
                 <h1 class="display-6">Payment To Tutor</h1>
             </div>
-        </div> <!-- End -->
+        </div> 
         <div class="row">
             <div class="col-lg-6 mx-auto">
                 <div class="card ">
                     <div class="card-header">
-                        <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
-                            <!-- Credit card form tabs -->
-                            <ul role="tablist" class="nav bg-light nav-pills rounded nav-fill mb-3">
-                                <li class="nav-item"> <a data-toggle="pill" href="#credit-card"
-                                        class="nav-link active "> <i class="fas fa-credit-card mr-2"></i> Credit Card
-                                    </a> </li>
-                                
-                            </ul>
-                        </div> <!-- End -->
-                        <!-- Credit card form content -->
+                        <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2"  style="background-color: rgba(3, 28, 54, 0.25)">
+                            
+                            <div> Credit Card Info</div>
+                                     
+                        </div> 
                         <div class="tab-content">
-                            <!-- credit card info-->
-                            <div id="credit-card" class="tab-pane fade show active pt-3">
+                          
+                            <div id="credit-card">
                                 <div class="flex justify-center mt-32">
                                     <form action="/charge" method="POST">
                                         <div class="form-group"> <label for="email">
@@ -65,9 +60,8 @@
                                 <script src="paymenthelper.js"></script>
 
                                 <form role="form" onsubmit="event.preventDefault()">
-                            </div> <!-- End -->
-                            <!-- Paypal info -->
-                            <div id="paypal" class="tab-pane fade pt-3">
+                            </div> 
+                            <div>
                                 <h6 class="pb-2">To pay in cash, please contact you're respective tutor via email and
                                     set up a payment transaction via either cash or venmo.</h6>
                                 <p> <a href="/dashboard" type="button" class="btn btn-primary "><i
@@ -75,8 +69,7 @@
                                 <p class="text-muted"> Note: Question Mingle takes no responsibility for cash
                                     transactions from eithe tutor or student and surrenders all knowledge or liability
                                 </p>
-                            </div> <!-- End -->
-                            <!-- End -->
+                            </div> 
                         </div>
                     </div>
                 </div>
@@ -87,7 +80,7 @@
 </body>
 <style>
     body {
-        background: #f5f5f5
+        background: white;
     }
 
     .rounded {
@@ -95,11 +88,11 @@
     }
 
     .nav-pills .nav-link {
-        color: #555
+        color: #555;
     }
 
     .nav-pills .nav-link.active {
-        color: white
+        color: #fff;
     }
 
     input[type="radio"] {

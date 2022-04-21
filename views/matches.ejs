@@ -29,15 +29,15 @@
                 <div class="d-flex flex-column align-items-center text-center">
                   <img src="https://via.placeholder.com/150x150/4169E1/000000" alt="avatar" class="rounded-circle" width="200" height="200">
                   <div class="mt-3">
-                    <h4 style="font-size: 30px"> <%= user.username%></h4>
-                    <div class="body-font">
-                    <p class="text-secondary mb-1">Specialty: </p>
-                    <p class="text-muted font-size-sm">Hometown: </p>
-                    <p class="text-secondary mb-1">About: </p>
-                    <p class="smaller-font">Enterway ethay Englishway exttay erehay atthay ouyay antway 
+                    <h4> <%= user.username%></h4>
+                    <div class="profile-info">
+                    <p class="text-secondary mb-1">Phone: <%= user.phone%></p>
+                    <p class="text-muted font-size-sm">Email: <%= user.email%></p>
+                    <p class="text-secondary mb-1">Grade:   <%= user.grade%></p>
+                    <p class="smaller-font">About: Enterway ethay Englishway exttay erehay atthay ouyay antway 
                       anslatedtray intoway</p>
                     <button class="btn btn-primary ">View Profile</button>
-                    <a href="/paymentportal"  class="btn btn-outline-primary" name="username" value = "<%= user.username %>">Give a tip</a>
+                    <a href="/paymentportal"  class="btn btn-primary" name="username" value = "<%= user.username %>">Give a tip</a>
                   </div>
                   </div>
                 </div>
@@ -105,7 +105,7 @@
   </body>
 
   <style>
-      .body-font{
+      .profile-info{
           font-size: 20px;
       }
       .smaller-font{
@@ -116,6 +116,9 @@
       body{
         background-color: lightblue;
         font-family: 'Poppins', sans-serif;
+      }
+      .h4{
+        font-size: 30px;
       }
   </style>
 </html>
