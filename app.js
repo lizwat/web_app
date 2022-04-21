@@ -192,14 +192,14 @@ app.get("/matches", async (req, res)=>{
     resUsers.then(function(list){
        
         res.render("matches", {"users": list});
-    });
+    })
     
 })
 
 app.post("/matches", async (req, res)=>{
     let username = req.body.username;
-    var user = await User.findOne({username: username});
-    //res.render("/payment", {"user": user});
+    var user = await User.find({username: username});
+    res.render("rate_tutors", {"users": user});
 })
 /** 
 app.get("/matchmaker", (req, res)=> {
