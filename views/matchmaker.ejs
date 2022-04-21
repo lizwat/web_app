@@ -39,23 +39,23 @@
         ["I work well in high-pressure situations", "bmatch"]
     ] %>
     <div class="container">
-        <div class="justify-content-center"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"> Get Matched With Potential Tutors! </button> </div> <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="justify-content-center"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#questionnaire"> Get Matched With Potential Tutors! </button> </div> <!-- Modal -->
+        <div class="modal fade" id="questionnaire" tabindex="-1" role="dialog" aria-labelledby="instructions" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Rate your level of agreement with the following statements: 5 for strongly agree, 3 for neutral, 1 for strongly disagree</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                        <h5 class="modal-title" id="instructions">Rate your level of agreement with the following statements: 5 for strongly agree, 3 for neutral, 1 for strongly disagree</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                     </div>
                     <div class="modal-body">
                         <div id="smartwizard">
                             <ul>
-                                <li><a href="#step-1">Step 1<br /><small>Learning Style Info</small></a></li>
-                                <li><a href="#step-2">Step 2<br /><small>Preferences</small></a></li>
-                                <li><a href="#step-3">Step 3<br /><small>Classes</small></a></li>
-                                <li><a href="#step-4">Step 4<br /><small>Confirm </small></a></li>
+                                <li><a href="#learning-style">1<br /><small>Learning Style Info</small></a></li>
+                                <li><a href="#preferences">2<br /><small>Preferences</small></a></li>
+                                <li><a href="#classes">3<br /><small>Classes</small></a></li>
+                                <li><a href="#submit">4<br /><small>Submission</small></a></li>
                             </ul>
                             <div class="mt-4">
-                                <div id="step-1">
+                                <div id="learning-style">
                                     <div class = "row">
                                         <div class="col-md-6"> <%= questions[0][0]%> </div>
                                         <div class="col-md-6"> <%= questions[1][0]%></div>
@@ -113,7 +113,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="step-2">
+                                <div id="preferences">
                                     <div class = "row">
                                         <div class="col-md-6"> <%= questions[4][0]%>.</div>
                                         <div class="col-md-6"> <%= questions[5][0]%></div>
@@ -183,7 +183,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="step-3" class="">
+                                <div id="classes">
                                     <div class = "row">
                                         <div class="col-md-6"> <%= questions[8][0]%>.</div>
                                         <div class="col-md-6"> <%= questions[9][0]%></div>
@@ -241,9 +241,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="step-4" class="">
+                                <div id="submit">
                                     <div class="row">
-                                        <div class="col-md-12"> <span>Press Submist to load your results</span> </div>
+                                        <div class="col-md-12"> <span>Press Submit to load your results</span> </div>
                                         <button> Submit </button>
                                     </div>
                                 </div>
@@ -258,23 +258,23 @@
  </body>
  <style>
     body {
-        background-color: #eee
+        background-color: white;
     }
 
     .form-control:focus {
-        color: #495057;
-        background-color: #fff;
-        border-color: #80bdff;
+        color: rgba(104, 118, 120, .5);
+        background-color: white;
+        border-color: lightblue;
         outline: 0;
-        box-shadow: 0 0 0 0rem rgba(0, 123, 255, .25)
+        box-shadow: 0 0 0 0rem rgba(3, 125, 253, .25)
     }
 
     .btn-secondary:focus {
-        box-shadow: 0 0 0 0rem rgba(108, 117, 125, .5)
+        box-shadow: 0 0 0 0rem rgba(104, 118, 120, .5)
     }
 
     .close:focus {
-        box-shadow: 0 0 0 0rem rgba(108, 117, 125, .5)
+        box-shadow: 0 0 0 0rem rgba(104, 118, 120, .5)
     }
 
     .mt-200 {
