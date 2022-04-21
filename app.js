@@ -191,14 +191,19 @@ app.get("/createpost", (req, res) => {
 
 
 app.get("/matches", async (req, res)=>{
-    var users =  await User.find({});
-    res.render("matches", {"users": users});
+    var user = req.cookies.currentUser;
+    var resUsers = Promise.resolve(findMatches(user));
+    resUsers.then(function(list){
+       
+        res.render("matches", {"users": list});
+    })
+    
 })
 
 app.post("/matches", async (req, res)=>{
     let username = req.body.username;
-    var user = await User.findOne({username: username});
-    //res.render("/payment", {"user": user});
+    var user = await User.find({username: username});
+    res.render("rate_tutors", {"users": user});
 })
 /** 
 app.get("/matchmaker", (req, res)=> {
@@ -300,7 +305,7 @@ res.cookie("currentUser", req.body.username, {
             res.render("register");
         }else if(tutor){
             console.log("to courses")
-            res.render("courses");
+            res.redirect("courses");
         }else{
             passport.authenticate("local")(req, res, function () {
             res.redirect("/login");

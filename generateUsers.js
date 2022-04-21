@@ -33,9 +33,9 @@ classlist = ["csds300", "csds310", "csds395", "csds411", "csds284", "csds111", "
 
 const generateUser = async () => {
 
-  fname = name[getRandomInt(21890)];
+  fname = name[getRandomInt(21890)].toLowerCase();
   console.log(fname);
-  lname = name[getRandomInt(21890)];
+  lname = name[getRandomInt(21890)].toLowerCase();
   console.log(lname);
   username = fname.concat(lname)
   console.log(username);
@@ -95,7 +95,7 @@ const generateUser = async () => {
 }
 
 //generate users
-for (i = 0; i < 10; i++) {
+for (i = 0; i < 100; i++) {
   generateUser()
 }
 
