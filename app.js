@@ -187,8 +187,13 @@ app.get("/createpost", (req, res) => {
 
 
 app.get("/matches", async (req, res)=>{
-    var users =  await User.find({});
-    res.render("matches", {"users": users});
+    var user = req.cookies.currentUser;
+    var resUsers = Promise.resolve(findMatches(user));
+    resUsers.then(function(list){
+       
+        res.render("matches", {"users": list});
+    });
+    
 })
 
 app.post("/matches", async (req, res)=>{
