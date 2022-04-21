@@ -133,8 +133,6 @@ app.get("/matchmaker", (req, res)=> {
     res.render("matchmaker");
 }) */
 
-
-
 /*app.get("/payment", (req, res)=>{
     res.render("payment", {"user": user});
 })*/
@@ -316,6 +314,7 @@ app.post("/matchmaker", async (req, res)=>{
     
     
 })
+
 /** 
 app.post("/questionnaire",(req,res) => {
     res.render("matchmaker",);
@@ -354,13 +353,6 @@ app.get("/logout",(req,res)=>{
     res.redirect("/");
     res.end
 });
-
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
-}
 
 //Listen On Server
 app.listen(process.env.PORT || 3000, function (err) {
