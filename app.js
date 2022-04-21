@@ -98,11 +98,14 @@ const authRouter = require('./routes/auth');
 const userRouter = require('./routes/users');
 const tutorsRouter = require('./routes/tutors');
 const searchRouter = require('./routes/search');
+const matchesRouter = require('./routes/matches');
 
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/tutors', tutorsRouter);
 app.use('/search', searchRouter);
+app.use('/matches', matchesRouter);
+
 
 app.get("/", (req, res) => {
     res.render("home");
@@ -235,33 +238,6 @@ app.get('/posthistory', (req, res) => {
       })
       .catch(error => console.error(error))
 })
-
-
-//Search
-//TODO: filter queries to only retrieve tutors for a specific class during search
-app.get("/search",(req,res)=>{
-    res.render("search");
-});
-
-app.post("/search", async (req,res)=>{
-    const input = req.body.search.toLowerCase();
-    if (!handleInput(input)){ //input scrubbing - allows text and numbers
-        console.log("Invalid Input")
-        return res.send("<script> alert('Please Enter Valid Text'); window.location =  '/dashboard'; </script>")
-    }
-    type = typefind(input)
-    var results = ""
-    if(type == "username"){
-        results = await User.find({username: {"$regex": input}, tutor:true}) //search queries by username (inclusive) and returns only tutors  
-    }else if(type == "name"){ //name might include fname, lname, or username
-        results = await User.find({$or:[{fName: {"$regex": input}}, {lName:{"$regex": input}}, {username: {"$regex": input}}], tutor:true})
-    }else if (type == "course"){
-        console.log("checking for courses")
-        results = await User.find({classes: {"$elemMatch": { "$regex": input}}, tutor:true}) //search queries by courslist (inclusive) and returns only tutors
-    }
-    res.render("tutors", {"users": results});
-})
-//end search
 
 //Questionnaire for matchmaker
 
