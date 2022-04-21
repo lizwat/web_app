@@ -2,7 +2,6 @@ const { vary } = require('express/lib/response');
 const { on } = require('./models/user');
 const ObjectID = require('mongodb').ObjectID;
 var auth = require('passport-local-authenticate');
-const crypto = require('crypto');
 
 
 const express = require('express'),
@@ -92,7 +91,11 @@ app.use((req, res, next) => {
 //=======================
 //      R O U T E S
 //=======================
+const authRouter = require('./routes/auth');
+const userRouter = require('./routes/users');
 
+app.use('/auth', authRouter);
+app.use('/users', userRouter);
 
 app.get("/", (req, res) => {
     res.render("home");
@@ -108,7 +111,6 @@ app.get('/userprofile', function(req, res, next) {
       res.redirect('/login');
     }
     else{
-        console.log("i hit this");
         res.render("userprofile");
     }
 });
@@ -145,6 +147,7 @@ if (!req.isAuthenticated()) {
 }
 });
 
+/*
 // Handle password change request
 // --------------------------------------------------
 app.post("/changepassword", async (req, res, next) => {
@@ -170,9 +173,10 @@ app.post("/changepassword", async (req, res, next) => {
         
         user = await User.findById(_id);
         user.changePassword(req.body.curr_password, req.body.new_password);
-        res.redirect('/login');
+        res.redirect('/auth/login');
     }   
 }});
+*/
   
 
 //Auth Routes
@@ -761,3 +765,4 @@ function setUserIDResponseCookie(req, res, next) { //sets cookie during login, p
     }
     next();
 }
+
