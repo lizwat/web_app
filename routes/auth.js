@@ -7,7 +7,6 @@ const ObjectID = require('mongodb').ObjectID;
 User = require("../models/user");
 LocalStrategy = require("passport-local"),
 
-
 passport.use(new LocalStrategy(User.authenticate()));
 
 router.use(passport.initialize());
@@ -109,7 +108,7 @@ router.post("/register", (req, res) => {
 // --------------------------------------------------
 router.get("/changepassword", (req, res) => {
     if (!req.isAuthenticated()) {
-        res.redirect('/login');
+        res.redirect('/auth/login');
     } else {
         console.log("i am here")
         res.render("changepassword");
@@ -121,7 +120,7 @@ router.get("/changepassword", (req, res) => {
 router.post("/changepassword", async (req, res, next) => {
     if (!req.isAuthenticated()) {
         console.log("i am not authenticated")
-        res.redirect('/login');
+        res.redirect('/auth/login');
     }
 
     else{

@@ -2,15 +2,27 @@ const express = require('express');
 const router = express.Router();
 const flash = require('connect-flash');
 const ObjectID = require('mongodb').ObjectID;
+const passport = require('passport');
 
 User = require("../models/user");
 
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser((user, done) => {
+  done(null, user._id);
+});
+passport.deserializeUser((id, done) => {
+  done(null, { id });
+});
+
+router.use(passport.initialize());
+router.use(passport.session());
 
 // Rendering user profile view
 // --------------------------------------------------
 router.get('/userprofile', function(req, res, next) {
     if (!req.isAuthenticated()) { 
-      res.redirect('/login');
+      res.redirect('/auth/login');
     }
     else{
         res.render("userprofile");
@@ -21,7 +33,7 @@ router.get('/userprofile', function(req, res, next) {
 // --------------------------------------------------
 router.post('/userprofile', async (req, res, next) => {
     if (!req.isAuthenticated()) {
-      res.redirect('/login');
+      res.redirect('/auth/login');
     }
 
     const users = req.app.locals.users;
@@ -34,7 +46,7 @@ router.post('/userprofile', async (req, res, next) => {
       if (err) {
         throw err;
       }
-      res.redirect('/userprofile');
+      res.redirect('/users/userprofile');
     });
   });
 

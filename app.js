@@ -103,89 +103,8 @@ app.use('/tutors', tutorsRouter);
 app.get("/", (req, res) => {
     res.render("home");
 })
-/*app.get("/userprofile", isLoggedIn, (req, res) => {
-    res.render("userprofile");
-})*/
 
-// Rendering user profile view
-// --------------------------------------------------
-app.get('/userprofile', function(req, res, next) {
-    if (!req.isAuthenticated()) { 
-      res.redirect('/login');
-    }
-    else{
-        res.render("userprofile");
-    }
-});
 
-// Handle updating user profile data
-// --------------------------------------------------
-app.post('/userprofile', async (req, res, next) => {
-    if (!req.isAuthenticated()) {
-      res.redirect('/login');
-    }
-
-    const users = req.app.locals.users;
-    const _id = ObjectID(req.session.passport.user);
-  
-    const { username, fName, lName,
-        email, phone } = req.body;
-
-    users.updateOne({ _id }, { $set: { username, fName, lName, phone, email } }, (err) => {
-      if (err) {
-        throw err;
-      }
-      res.redirect('/userprofile');
-    });
-  });
-
-// Rendering change password view 
-// --------------------------------------------------
-app.get("/changepassword", (req, res) => {
-if (!req.isAuthenticated()) { 
-    res.redirect('/login');
-}else{
-    console.log("i am here")
-    res.render("changepassword");
-}
-});
-
-/*
-// Handle password change request
-// --------------------------------------------------
-app.post("/changepassword", async (req, res, next) => {
-
-    if (!req.isAuthenticated()) {
-        console.log("i am not authenticated")
-        res.redirect('/login');
-    }
-
-    else{
-
-    current_password = req.body.curr_password;
-    new_password = req.body.new_password;
-    retyped_new_password = req.body.retyped_new_password;
-
-    //check if the new password and retyped password are the same 
-    if (new_password != retyped_new_password){
-        console.log("the new password and retyped password do not match");
-        throw err
-    } 
-    else{
-        const _id = ObjectID(req.session.passport.user);
-        
-        user = await User.findById(_id);
-        user.changePassword(req.body.curr_password, req.body.new_password);
-        res.redirect('/auth/login');
-    }   
-}});
-*/
-  
-
-//Auth Routes
-app.get("/login", (req, res) => {
-    res.render("login");
-});
 
 app.get("/createpost", (req, res) => {
     var usertext = req.cookies.currentUser;
@@ -247,14 +166,6 @@ app.get("/paymentportal", (req, res) => {
         res.send(err);
       }
     });
-
-/*const postSchema = {
-    class: String,
-    topic: String,
-    description: String
-}
-
-const Post = mongoose.model('post', postSchema); */
 
 app.get("/dashboard", (req, res) => {
     Post.find({}, function (err, posts){
