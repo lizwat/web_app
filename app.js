@@ -93,9 +93,12 @@ app.use((req, res, next) => {
 //=======================
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/users');
+const tutorsRouter = require('./routes/tutors');
+
 
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
+app.use('/tutors', tutorsRouter);
 
 app.get("/", (req, res) => {
     res.render("home");
@@ -383,60 +386,60 @@ app.post("/tutors", async (req, res)=> {
 
 //tutor rating
 
-    app.get("/rate_tutors", (req,res)=>{
-      res.render("rate_tutors", {"users": user});
+app.get("/rate_tutors", (req,res)=>{
+    res.render("rate_tutors", {"users": user});
+});
+
+
+app.post("/rate_tutors", async (req, res)=> {
+    const input = req.body.username;
+    console.log(req.body.username);
+    const rates = req.body;
+    var rateVal = parseFloat(rates.rate);
+
+
+    var user = await User.findOne({username: input});
+
+    console.log(user.username);
+
+    if(!user.rateCount || isNaN(user.rateAverage)){
+    
+    User.updateOne(user, {rateCount: 1, rateAverage: rateVal}, function(err, res){
+        if(err){
+        throw err;
+        }
+        else {
+        console.log("1 document updated");
+        console.log(user.rateCount);
+        }
     });
 
+    }
+    else {
+    var rateCount  = parseFloat(user.rateCount);
+    var rateAvg = parseFloat(user.rateAverage);
+    console.log(rateCount);
+    console.log(rateAvg);
 
-    app.post("/rate_tutors", async (req, res)=> {
-      const input = req.body.username;
-      console.log(req.body.username);
-      const rates = req.body;
-      var rateVal = parseFloat(rates.rate);
-    
+    var updatedRateAvg = ((rateCount*rateAvg) + rateVal)/(rateCount + 1);
+    var updateRateCount = rateCount +  1;
 
-      var user = await User.findOne({username: input});
-
-      console.log(user.username);
-
-      if(!user.rateCount || isNaN(user.rateAverage)){
-        
-        User.updateOne(user, {rateCount: 1, rateAverage: rateVal}, function(err, res){
-          if(err){
-            throw err;
-          }
-          else {
-            console.log("1 document updated");
-            console.log(user.rateCount);
-          }
-        });
-    
-      }
-      else {
-        var rateCount  = parseFloat(user.rateCount);
-        var rateAvg = parseFloat(user.rateAverage);
-        console.log(rateCount);
-        console.log(rateAvg);
-
-        var updatedRateAvg = ((rateCount*rateAvg) + rateVal)/(rateCount + 1);
-        var updateRateCount = rateCount +  1;
-
-        console.log(updatedRateAvg);
-        console.log(updateRateCount);
+    console.log(updatedRateAvg);
+    console.log(updateRateCount);
 
 
-        User.updateOne({username: input}, {rateCount: updateRateCount, rateAverage:updatedRateAvg}, function(err, res){
-          if(err){
-            throw err;
-          }
-          else {
-            console.log("1 document updated");
-          }
-        });
-      }
-
-      res.send(user);
+    User.updateOne({username: input}, {rateCount: updateRateCount, rateAverage:updatedRateAvg}, function(err, res){
+        if(err){
+        throw err;
+        }
+        else {
+        console.log("1 document updated");
+        }
     });
+    }
+
+    res.send(user);
+});
 //end tutor rating
 
 //Search
