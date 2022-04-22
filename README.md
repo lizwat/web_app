@@ -28,6 +28,8 @@ Justin Liz Nikhil Alex Kevin Maryam
 
 3) Tipping a tutor and making a payment via Stripe
 
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/55059776/164764352-711bde46-eadd-42ec-8d4b-ea6467a59fe6.gif)
+
 4) Filling Out Matchmaking Form ![New Recording - 4_22_2022, 12_26_42 PM-low (1)](https://user-images.githubusercontent.com/59985464/164763871-fade3c7b-f16d-421a-9c5f-64ee511c6bce.gif)
 
 
