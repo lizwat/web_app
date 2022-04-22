@@ -2,7 +2,6 @@ const { vary } = require('express/lib/response');
 const { on } = require('./models/user');
 const ObjectID = require('mongodb').ObjectID;
 var auth = require('passport-local-authenticate');
-const crypto = require('crypto');
 
 
 const express = require('express'),
@@ -58,6 +57,7 @@ db.on("error", (err) => {
   db.on('connected', (err, res) => {
     console.log('Connected to database')
 })
+
 const postCollection = db.collection('posts')
 
 /*
@@ -75,12 +75,14 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
     done(null, { id });
   });
+
 passport.use(new LocalStrategy(User.authenticate()));
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({
     extended: true
 }))
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -92,121 +94,35 @@ app.use((req, res, next) => {
 //=======================
 //      R O U T E S
 //=======================
+const authRouter = require('./routes/auth');
+const userRouter = require('./routes/users');
+const tutorsRouter = require('./routes/tutors');
+const searchRouter = require('./routes/search');
+const matchesRouter = require('./routes/matches');
+const matchmakerRouter = require('./routes/matchmaker');
+
+
+app.use('/auth', authRouter);
+app.use('/users', userRouter);
+app.use('/tutors', tutorsRouter);
+app.use('/search', searchRouter);
+app.use('/matches', matchesRouter);
+app.use('/matchmaker', matchmakerRouter);
 
 
 app.get("/", (req, res) => {
     res.render("home");
 })
-/*app.get("/userprofile", isLoggedIn, (req, res) => {
-    res.render("userprofile");
-})*/
-
-// Rendering user profile view
-// --------------------------------------------------
-app.get('/userprofile', function(req, res, next) {
-    if (!req.isAuthenticated()) { 
-      res.redirect('/login');
-    }
-    else{
-        console.log("i hit this");
-        res.render("userprofile");
-    }
-});
-
-// Handle updating user profile data
-// --------------------------------------------------
-app.post('/userprofile', async (req, res, next) => {
-    if (!req.isAuthenticated()) {
-      res.redirect('/login');
-    }
-
-    const users = req.app.locals.users;
-    const _id = ObjectID(req.session.passport.user);
-  
-    const { username, fName, lName,
-        email, phone } = req.body;
-
-    users.updateOne({ _id }, { $set: { username, fName, lName, phone, email } }, (err) => {
-      if (err) {
-        throw err;
-      }
-      res.redirect('/userprofile');
-    });
-  });
-
-// Rendering change password view 
-// --------------------------------------------------
-app.get("/changepassword", (req, res) => {
-if (!req.isAuthenticated()) { 
-    res.redirect('/login');
-}else{
-    console.log("i am here")
-    res.render("changepassword");
-}
-});
-
-// Handle password change request
-// --------------------------------------------------
-app.post("/changepassword", async (req, res, next) => {
-
-    if (!req.isAuthenticated()) {
-        console.log("i am not authenticated")
-        res.redirect('/login');
-    }
-
-    else{
-
-    current_password = req.body.curr_password;
-    new_password = req.body.new_password;
-    retyped_new_password = req.body.retyped_new_password;
-
-    //check if the new password and retyped password are the same 
-    if (new_password != retyped_new_password){
-        console.log("the new password and retyped password do not match");
-        throw err
-    } 
-    else{
-        const _id = ObjectID(req.session.passport.user);
-        
-        user = await User.findById(_id);
-        user.changePassword(req.body.curr_password, req.body.new_password);
-        res.redirect('/login');
-    }   
-}});
-  
-
-//Auth Routes
-app.get("/login", (req, res) => {
-    res.render("login");
-});
 
 app.get("/createpost", (req, res) => {
     var usertext = req.cookies.currentUser;
     res.render("createpost");
 });
 
-
-app.get("/matches", async (req, res)=>{
-    var user = req.cookies.currentUser;
-    var resUsers = Promise.resolve(findMatches(user));
-    resUsers.then(function(list){
-       
-        res.render("matches", {"users": list});
-    })
-    
-})
-
-app.post("/matches", async (req, res)=>{
-    let username = req.body.username;
-    var user = await User.find({username: username});
-    res.render("rate_tutors", {"users": user});
-})
 /** 
 app.get("/matchmaker", (req, res)=> {
     res.render("matchmaker");
 }) */
-
-
 
 /*app.get("/payment", (req, res)=>{
     res.render("payment", {"user": user});
@@ -241,14 +157,6 @@ app.get("/paymentportal", (req, res) => {
       }
     });
 
-/*const postSchema = {
-    class: String,
-    topic: String,
-    description: String
-}
-
-const Post = mongoose.model('post', postSchema); */
-
 app.get("/dashboard", (req, res) => {
     Post.find({}, function (err, posts){
         res.render('dashboard', {
@@ -256,60 +164,6 @@ app.get("/dashboard", (req, res) => {
         })
     })
 });
-
-app.post("/login", passport.authenticate("local"),  setUserIDResponseCookie, function (req, res, next) { //saves username as cookie
-    if (req.user) {
-        res.redirect("/dashboard");
-    } else {
-        res.redirect("/login");
-    }
-    next();
-});
-
-app.get("/register", (req, res) => {
-    res.render("register");
-});
-
-
-app.post("/register", (req, res) => {
-if (req.body.tutor == "on"){ //check status of tutor textbox
-    tutor = true;
-}else{
-    tutor = false;
-}
-if (!ValidateEmail(req.body.email)){
-    return res.send("<script> alert('Please Enter A Valid Email'); window.location =  '/register'; </script>")
-}
-res.cookie("currentUser", req.body.username, {
-    // expire in year 9999 (from: https://stackoverflow.com/a/28289961)
-    expires: new Date(253402300000000),
-    httpOnly: false, // allows JS code to access it
-});
-    User.register(new User({
-        fName: req.body.fName.toLowerCase(),
-        lName: req.body.lName.toLowerCase(),
-        username: req.body.username.toLowerCase(),
-        phone: req.body.phone,
-        telephone: req.body.telephone,
-        grade: req.body.grade,
-        phone: req.body.phone,
-        email: req.body.email,
-        tutor: tutor,
-    }), req.body.password, function (err, user) {
-        if (err) {
-            console.log(err);
-            res.render("register");
-        }else if(tutor){
-            console.log("to courses")
-            res.redirect("courses");
-        }else{
-            passport.authenticate("local")(req, res, function () {
-            res.redirect("/login");
-            })
-        }
-    })
-})
-
 
 app.post("/replypost", async (req, res) => {
     var x = req.body.reply;
@@ -326,11 +180,6 @@ app.post("/replypost", async (req, res) => {
     .catch(error => console.error(error))
 });
 
-/*function find (name, query, cb) {
-    mongoose.connection.db.collection(name, function (err, collection) {
-       collection.find(query).toArray(cb);
-   });
-}*/
 
 function numbergenerator(){
     xo = Math.floor(Math.random()*100);
@@ -552,13 +401,6 @@ app.get("/logout",(req,res)=>{
     res.end
 });
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
-}
-
 //Listen On Server
 app.listen(process.env.PORT || 3000, function (err) {
     if (err) {
@@ -768,3 +610,4 @@ function setUserIDResponseCookie(req, res, next) { //sets cookie during login, p
     }
     next();
 }
+
