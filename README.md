@@ -28,9 +28,11 @@ Justin Liz Nikhil Alex Kevin Maryam
 
 3) Tipping a tutor and making a payment via Stripe
 
-4) Filling Out Matchmaking Form (https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/90f5ddc0-1244-4c15-a412-5434b70995dd.gif?ClientID=vimeo-core-prod&Date=1650645006&Signature=2bdcd7132239e7c4b251b3c22bb5bca386af7862)
+4) Filling Out Matchmaking Form ![New Recording - 4_22_2022, 12_26_42 PM-low (1)](https://user-images.githubusercontent.com/59985464/164763871-fade3c7b-f16d-421a-9c5f-64ee511c6bce.gif)
 
-5) Displaying Results From Matchmaking Form
+
+5) Displaying Results From Matchmaking Form![New Recording - 4_22_2022, 12_26_42 PM-low](https://user-images.githubusercontent.com/59985464/164763860-e006a549-7a82-4e6b-b202-f8ed646c4edc.gif)
+
 
 6) Editing User profile and adding profile picture
  
