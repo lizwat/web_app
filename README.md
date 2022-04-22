@@ -17,7 +17,6 @@ Maryam
 Note: Despite what it says, this is not the main branch. Please go to login/register instead. Thanks :)
 =======
 Justin Liz Nikhil Alex Kevin Maryam
-![Alt Text](https://imgur.com/a/WpJqST3)
 
 
 Note: This is actual main branch for the app
