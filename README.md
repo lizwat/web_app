@@ -26,6 +26,25 @@ Justin Liz Nikhil Alex Kevin Maryam
 
 ![replies](https://user-images.githubusercontent.com/63173552/164759833-9ea268d1-4f8a-45a9-ba55-4f6790395e9c.gif)
 
+3) Tipping a tutor and making a payment via Stripe
+
+4) Filling Out Matchmaking Form
+
+5) Displaying Results From Matchmaking Form
+
+6) Editing User profile and adding profile picture
+ 
+7) Register as a user and login as a user
+
+8) Change password of a user
+
+9) View list of tutors and individual tutor profiles
+
+10) Rate a tutor
+
+11) Search bar related functionality
+
+
 
 Note: This is actual main branch for the app
 >>>>>>> d51f140b32e46614c8ec4b6aac4890a0ce7be16f
