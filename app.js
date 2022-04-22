@@ -353,8 +353,8 @@ app.get("/matchmaker", async (req,res)=>{
 
 app.post("/matchmaker", async (req, res)=>{
     processResponses(req);
-    var users = findMatches(req.cookies.currentUser);
-    var resUsers = Promise.resolve(users)
+    //var users = findMatches(req.cookies.currentUser);
+    var resUsers = Promise.resolve(findMatches(req.cookies.currentUser))
     resUsers.then(function(list){
         console.log(list[0].username);
         res.render("matches", {"users": list});
@@ -597,6 +597,12 @@ var questions = [
     }
     return score
 }
+
+function sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }
 
 function setUserIDResponseCookie(req, res, next) { //sets cookie during login, pulled from https://stackoverflow.com/questions/12258795/how-to-access-cookie-set-with-passport-js
     // if user-id cookie is out of date, update it

@@ -11,7 +11,9 @@ async function findMatches(currentUser){
     highscore = 0;
     user = await User.findOne({username: currentUser});
     user.toObject();
+    var topmatch = ""
     potentialMatches = await User.find({tutor:true, username: {$ne : currentUser}, questionnaire:{ $exists: true, $not: {$size: 0} }}); //pull all tutors down who have filled the questionnaire from DB to sort through
+    //await sleep (15000)
     potentialMatches.forEach(tutor=>{
         score = compare(user,tutor); //compare user and tutor answers to judge match
         results[0].push(tutor);
@@ -104,7 +106,7 @@ function bubbleSort2(arr, n){ //bubblesort pulled from https://www.geeksforgeeks
     for (i = 0; i < n - 1; i++) {
         swapped = false;
         for (j = 0; j < n - i - 1; j++) {
-            if (arr[1][j] > arr[1][j + 1]) { //sorts in order of score
+            if (arr[1][j] < arr[1][j + 1]) { //sorts in order of score
                 temp = arr[0][j];
                 temp2 = arr[1][j];
                 arr[0][j] = arr[0][j + 1];
@@ -117,20 +119,26 @@ function bubbleSort2(arr, n){ //bubblesort pulled from https://www.geeksforgeeks
         if (swapped == false)
             break;
     }
-    var result = Array.from(Array(2), () => new Array(0));
-    for(let i =arr.length-1; i>=0;i--){ //list iterated in reverse as bubblesort orders low to high
-        if(!isNaN(arr[1][i])){
-            result[0].push(arr[0][i]);
-            result[1].push(arr[1][i]);
-        }
-    }
+    // var result = Array.from(Array(2), () => new Array(0));
+    // for(let i =arr.length-1; i>=0;i--){ //list iterated in reverse as bubblesort orders low to high
+    //     if(!isNaN(arr[1][i])){
+    //         result[0].push(arr[0][i]);
+    //         result[1].push(arr[1][i]);
+    //     }
+    // }
     console.log("######BUBBLESORT######")
-    console.log(result[0][0])
-    console.log(result[1][0])
-    console.log(result[0][1])
-    console.log(result[1][1])
-    return result
+    console.log(arr[0][0])
+    console.log(arr[1][0])
+    console.log(arr[0][1])
+    console.log(arr[1][1])
+    return arr
 }
+
+function sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }
 
 // Render MatchMaker View
 // --------------------------------------------------
@@ -155,10 +163,6 @@ router.get("/", async (req,res)=>{
     console.log(user);
 
     var filter = await User.find({username: user,  questionnaire:{ $exists: true, $not: {$size: 0}}});
-    console.log(filter);
-    console.log(filter.length)
-    console.log(filter.length == 0);
-    console.log(filter.questionnaire);
     if(!filter.length == 0){
         var resUsers = Promise.resolve(findMatches(user));
         resUsers.then(function(list){
@@ -175,12 +179,14 @@ router.get("/", async (req,res)=>{
 // Display Matchmaker Results
 // --------------------------------------------------
 router.post("/", async (req, res)=>{
-    processResponses(req);
-    var users = findMatches(req.cookies.currentUser);
-    var resUsers = Promise.resolve(users)
-    resUsers.then(function(list){
-        res.render("matches", {"users": list});
-    });
+    var process = Promise.resolve(processResponses(req));
+    process.then(function(){
+        var resUsers = Promise.resolve(findMatches(req.cookies.currentUser))
+        resUsers.then(function(list){
+            res.render("matches", {"users": list});
+        });
+    })
 })
+
 
 module.exports = router

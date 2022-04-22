@@ -20,7 +20,7 @@ function handleInput(input){ //scrubs text input from search bar
     }else{ //accept only alphanumeric input and continue
         console.log("Input Accepted")
         return true;
-    }
+    }S
 }
 
 //interperate field to search
