@@ -28,7 +28,7 @@ Justin Liz Nikhil Alex Kevin Maryam
 
 3) Tipping a tutor and making a payment via Stripe
 
-4) Filling Out Matchmaking Form
+4) Filling Out Matchmaking Form (https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/90f5ddc0-1244-4c15-a412-5434b70995dd.gif?ClientID=vimeo-core-prod&Date=1650645006&Signature=2bdcd7132239e7c4b251b3c22bb5bca386af7862)
 
 5) Displaying Results From Matchmaking Form
 
