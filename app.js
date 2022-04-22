@@ -457,6 +457,7 @@ app.post("/search", async (req,res)=>{
         console.log("checking for courses")
         results = await User.find({classes: {"$elemMatch": { "$regex": input}}, tutor:true}) //search queries by courslist (inclusive) and returns only tutors
     }
+    results = queryParse(results)
     res.render("tutors", {"users": results});
 })
 //end search
@@ -611,7 +612,7 @@ function queryParse(querylist){ //parses db results list for specific datafields
     querylist = bubbleSort(querylist, querylist.length);
     var result = new Array();
     for(let i =querylist.length-1; i>=0;i--){ //list iterated in reverse as bubblesort orders low to high
-        result.push(querylist[i].username);
+        result.push(querylist[i]);
     }
     return result;
 }
@@ -726,6 +727,7 @@ var questions = [
 
     for(i=0; i<12;i++){ //for each question, compare the answer and judge accordingly
         type = questions[i][1];
+        console.log(user.questionnaire[i])
         //compare binary match --> matching answer should increase score
         if (type == "bmatch"){
             if(user.questionnaire[i]==tutor.questionnaire[i]){

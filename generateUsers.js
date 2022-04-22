@@ -68,7 +68,7 @@ const generateUser = async () => {
   tutor = Math.random() < 0.5;
   console.log(tutor)
   rateCount = getRandomInt(1000);
-  rateAverage = getRandomInt(5);
+  rateAverage = getRandomInt(6);
   courses = [];
   for (i = 0; i < getRandomInt(10); i++) {
     courses.push(classlist[getRandomInt(classlist.length)])
@@ -77,7 +77,7 @@ const generateUser = async () => {
   responses = [getRandomInt(2), getRandomInt(2), getRandomInt(5), getRandomInt(5), getRandomInt(5), getRandomInt(5), getRandomInt(5), getRandomInt(5), getRandomInt(5), getRandomInt(2), getRandomInt(5), getRandomInt(2)]
   console.log(responses)
 
-  await User.register(new User({
+  User.register(new User({
     fName: fname,
     lName: lname,
     username: username,
@@ -98,4 +98,5 @@ const generateUser = async () => {
 for (i = 0; i < 100; i++) {
   generateUser()
 }
+
 
