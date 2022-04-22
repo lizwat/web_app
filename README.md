@@ -18,6 +18,9 @@ Note: Despite what it says, this is not the main branch. Please go to login/regi
 =======
 Justin Liz Nikhil Alex Kevin Maryam
 
+![Alt Text](https://imgur.com/a/kg0pITb.gif)
+
+
 
 Note: This is actual main branch for the app
 >>>>>>> d51f140b32e46614c8ec4b6aac4890a0ce7be16f
