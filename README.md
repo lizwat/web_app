@@ -39,12 +39,16 @@ Justin Liz Nikhil Alex Kevin Maryam
 
 
 6) Editing User profile and adding profile picture
- 
+  ![ezgif-2-6a19347d38](https://user-images.githubusercontent.com/78427348/164765762-b8d12058-d6dd-4172-aebe-6eff922e3299.gif)
+
 7) Register as a user and login as a user
+![ezgif-2-3c21dc36d8](https://user-images.githubusercontent.com/78427348/164764505-a9ca0458-723b-4867-9d1f-ed6dc6e5fa30.gif)
 
 8) Change password of a user
+![ezgif-2-6857f942ed](https://user-images.githubusercontent.com/78427348/164766122-0e826696-2a88-42c3-b0ee-8de3f29a90a2.gif)
 
 9) View list of tutors and individual tutor profiles
+![ezgif-2-bf4dc5076f](https://user-images.githubusercontent.com/78427348/164766259-73c6fa79-7b83-4c64-857d-72dd40f24788.gif)
 
 10) Rate a tutor
 
