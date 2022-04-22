@@ -50,6 +50,8 @@ Justin Liz Nikhil Alex Kevin Maryam
 
 11) Search bar related functionality
 
+![SearchName](https://user-images.githubusercontent.com/19517839/164766251-18eab8a3-9e47-4df9-8b4f-68f11f22697c.gif)
+![SearchCourse](https://user-images.githubusercontent.com/19517839/164766280-15d99099-eb6f-4864-a320-fcbd1a7b2e38.gif)
 
 
 Note: This is actual main branch for the app
