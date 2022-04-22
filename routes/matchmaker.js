@@ -8,7 +8,7 @@ User = require("../models/user");
 // --------------------------------------------------
 async function findMatches(currentUser){
     var results = Array.from(Array(2), () => new Array(0));
-    i =0;
+    highscore = 0;
     user = await User.findOne({username: currentUser});
     user.toObject();
     potentialMatches = await User.find({tutor:true, username: {$ne : currentUser}, questionnaire:{ $exists: true, $not: {$size: 0} }}); //pull all tutors down who have filled the questionnaire from DB to sort through
@@ -16,10 +16,16 @@ async function findMatches(currentUser){
         score = compare(user,tutor); //compare user and tutor answers to judge match
         results[0].push(tutor);
         results[1].push(score);
+        if (score>highscore){
+            highscore = score;
+            topmatch = tutor
+        }
     })
     
     matchlist = bubbleSort2(results, results[0].length)
-    
+    console.log("Highscore")
+    console.log(highscore)
+    console.log(topmatch)
     console.log("Best Match")
     console.log(matchlist[0][0].username)
     console.log("Score")
@@ -33,6 +39,17 @@ async function findMatches(currentUser){
     // console.log(matchusernames)
     // return matchusernames;
     
+}
+
+
+async function processResponses(req){ //Process Questionnaire Responses
+    for(var value in req.body){
+        if(req.body.hasOwnProperty(value)){
+            currentResponse = req.body[value];
+            
+            await User.updateOne({username: req.cookies.currentUser},{$push: {questionnaire: currentResponse}})
+        }
+    }
 }
 
 function compare(user,tutor){
@@ -87,7 +104,7 @@ function bubbleSort2(arr, n){ //bubblesort pulled from https://www.geeksforgeeks
     for (i = 0; i < n - 1; i++) {
         swapped = false;
         for (j = 0; j < n - i - 1; j++) {
-            if (arr[1][j] > arr[1][j + 1]) { //sorts in order of rate avg.  May apply weight for ratecount in the future.
+            if (arr[1][j] > arr[1][j + 1]) { //sorts in order of score
                 temp = arr[0][j];
                 temp2 = arr[1][j];
                 arr[0][j] = arr[0][j + 1];
@@ -102,12 +119,16 @@ function bubbleSort2(arr, n){ //bubblesort pulled from https://www.geeksforgeeks
     }
     var result = Array.from(Array(2), () => new Array(0));
     for(let i =arr.length-1; i>=0;i--){ //list iterated in reverse as bubblesort orders low to high
-        result[0].push(arr[0][i]);
-        result[1].push(arr[1][i]);
+        if(!isNaN(arr[1][i])){
+            result[0].push(arr[0][i]);
+            result[1].push(arr[1][i]);
+        }
     }
     console.log("######BUBBLESORT######")
     console.log(result[0][0])
+    console.log(result[1][0])
     console.log(result[0][1])
+    console.log(result[1][1])
     return result
 }
 
@@ -158,7 +179,6 @@ router.post("/", async (req, res)=>{
     var users = findMatches(req.cookies.currentUser);
     var resUsers = Promise.resolve(users)
     resUsers.then(function(list){
-        console.log(list[0].username);
         res.render("matches", {"users": list});
     });
 })

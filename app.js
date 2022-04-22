@@ -483,6 +483,7 @@ async function processResponses(req){
     for(var value in req.body){
         if(req.body.hasOwnProperty(value)){
             currentResponse = req.body[value];
+            console.log(currentResponse)
             await User.updateOne({username: req.cookies.currentUser},{$push: {questionnaire: currentResponse}})
         }
     }
@@ -538,8 +539,11 @@ function bubbleSort2(arr, n){ //bubblesort pulled from https://www.geeksforgeeks
     }
     var result = Array.from(Array(2), () => new Array(0));
     for(let i =arr.length-1; i>=0;i--){ //list iterated in reverse as bubblesort orders low to high
-        result[0].push(arr[0][i]);
-        result[1].push(arr[1][i]);
+        if(!isNaN(arr[1][i])){
+            result[0].push(arr[0][i]);
+            result[1].push(arr[1][i]);
+        }
+        
     }
     console.log("######BUBBLESORT######")
     console.log(result[0][0])
